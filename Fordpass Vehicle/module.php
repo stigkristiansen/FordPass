@@ -169,7 +169,7 @@
 			}
 	
 			private function Refresh(string $VIN) : array{
-				if(strlen($ChargerId)>0) {
+				if(strlen($VIN)>0) {
 					$request[] = ['ChildId'=>(string)$this->InstanceID,'Function'=>'Status','VIN'=>$VIN];
 					
 					return $request;

@@ -175,7 +175,7 @@ include __DIR__ . "/../libs/fordpass.php";
 			}
 			
 			$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Sending the result back to the child with Id %s', (string)$ChildId), 0);
-			$this->SendDataToChildren(json_encode(["DataID" => "{90162874-BC86-2CD4-D8F6-AFCB86B7D3CC}", "ChildId" => $ChildId, "Buffer" => $return]));
+			$this->SendDataToChildren(json_encode(["DataID" => "{677E0420-B69C-597E-C909-39877953E1DC}", "ChildId" => $ChildId, "Buffer" => $return]));
 		}
 	
 

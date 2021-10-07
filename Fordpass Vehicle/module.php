@@ -93,7 +93,7 @@
 	
 					if($request!=null) {
 						$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Sending a request to the gateway: %s', json_encode($request)), 0);
-						$this->SendDataToParent(json_encode(['DataID' => '{4651EC8E-D0BB-1354-1167-BB7C87729F19}', 'Buffer' => $request]));
+						$this->SendDataToParent(json_encode(['DataID' => '{047CD9E9-0492-37DF-0955-3DF2F006F0A2}', 'Buffer' => $request]));
 					}
 	
 				} catch(Exception $e) {

@@ -99,24 +99,24 @@ include __DIR__ . "/../libs/fordpass.php";
 						$this->ExecuteFordPassRequest($childId, 'Status', array($VIN));
 						break;
 					case 'start':
-						if(!isset($request->State) {
+						if(!isset($request->State)) {
 							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $Request));
 						}
 
 						$this->ExecuteFordPassRequest($childId, 'Status', array($VIN, $request->State));
 						break;
 					case 'lock':
-						if(!isset($request->State) {
+						if(!isset($request->State)) {
 							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $Request));
 						}
 
 						$this->ExecuteFordPassRequest($childId, 'Lock', array($VIN, $request->State));
 						break;
 					case 'guard':
-						if(!isset($request->State) {
+						if(!isset($request->State)) {
 							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $Request));
 						}
-												
+
 						$this->ExecuteFordPassRequest($childId, 'Guard', array($VIN, $request->State));
 						break;
 					default:

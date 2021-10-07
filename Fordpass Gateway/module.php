@@ -67,7 +67,7 @@ include __DIR__ . "/../libs/fordpass.php";
 			try {
 				$this->SendDebug(IPS_GetName($this->InstanceID), 'Connecting to FordPass API...', 0);
 				$fordpass->Connect();
-				$token = fordpass->GetToken();
+				$token = $fordpass->GetToken();
 				
 				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Saving Token for later use: %s', json_encode($token)), 0);
 				$this->AddTokenToBuffer($token);

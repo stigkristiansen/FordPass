@@ -36,7 +36,7 @@ class FordPass {
     public function __construct(string $Region, String $Username='', string $Password='', string $AccessToken='', string $RefreshToken='', DateTime $Expires = null) {
         $this->username = $Username;
         $this->password = $Password;
-        $this->VIN = $VIN;
+        //$this->VIN = $VIN;
         $this->Region = $Region;
         $this->accessToken =$AccessToken;
         $this->refreshToken = $RefreshToken;

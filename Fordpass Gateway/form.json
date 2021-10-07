@@ -17,12 +17,6 @@
         {
             "type": "PasswordTextBox", "name": "Password", "caption": "Password"
         },
-        {
-            "type" :  "Label" , "caption" :  "Vehicle information"
-        },
-        {
-              "type" :  "ValidationTextBox" ,  "name" :  "VIN" ,  "caption" :  "VIN"
-        },
         {  "type" :  "Select" ,  "name" :  "Region" ,  "caption" :  "Region" , 
             "options" :  [
                 {  "label" :  "UK and Europe" , "value" : "1E8C7794-FF5F-49BC-9596-A1E0C86C5B19"  } , 

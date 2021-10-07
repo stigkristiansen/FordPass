@@ -4,9 +4,13 @@
     "type": 3,
     "vendor": "Ford",
     "aliases": [],
-    "parentRequirements": [],
+    "parentRequirements": [
+        "{047CD9E9-0492-37DF-0955-3DF2F006F0A2}"    
+    ],
     "childRequirements": [],
-    "implemented": [],
+    "implemented": [
+        "{677E0420-B69C-597E-C909-39877953E1DC}"
+    ],
     "prefix": "FPV",
     "url": ""
 }

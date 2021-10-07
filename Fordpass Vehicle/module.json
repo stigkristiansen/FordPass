@@ -1,0 +1,12 @@
+{
+    "id": "{90162874-BC86-2CD4-D8F6-AFCB86B7D3CC}",
+    "name": "Fordpass Vehicle",
+    "type": 3,
+    "vendor": "Ford",
+    "aliases": [],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "FPV",
+    "url": ""
+}

@@ -1,0 +1,16 @@
+{
+    "id": "{4651EC8E-D0BB-1354-1167-BB7C87729F19}",
+    "name": "Fordpass Gateway",
+    "type": 2,
+    "vendor": "Ford",
+    "aliases": [],
+    "parentRequirements": [],
+    "childRequirements": [
+        "{677E0420-B69C-597E-C909-39877953E1DC}"
+    ],
+    "implemented": [
+        "{047CD9E9-0492-37DF-0955-3DF2F006F0A2}"
+    ],
+    "prefix": "FPG",
+    "url": ""
+}

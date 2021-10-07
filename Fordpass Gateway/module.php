@@ -1,8 +1,9 @@
 <?php
-
 declare(strict_types=1);
-	class FordpassGateway extends IPSModule
-	{
+
+include __DIR__ . "/../libs/fordpass.php";
+
+	class FordpassGateway extends IPSModule {
 		public function Create()
 		{
 			//Never delete this line!
@@ -19,14 +20,12 @@ declare(strict_types=1);
 		$this->RegisterMessage(0, IPS_KERNELMESSAGE);
 		}
 
-		public function Destroy()
-		{
+		public function Destroy() {
 			//Never delete this line!
 			parent::Destroy();
 		}
 
-		public function ApplyChanges()
-		{
+		public function ApplyChanges() {
 			//Never delete this line!
 			parent::ApplyChanges();
 
@@ -50,6 +49,7 @@ declare(strict_types=1);
 	
 			$username = $this->ReadPropertyString('Username');
 			$password = $this->ReadPropertyString('Password');
+			$region = $this->ReadPropertyString('Region');
 	
 			if(strlen($username)==0) {
 				$this->LogMessage(sprintf('InitFordPass(): Missing property "Username" in module "%s"', IPS_GetName($this->InstanceID)), KL_ERROR);
@@ -58,16 +58,16 @@ declare(strict_types=1);
 				return null;
 			}
 	
-			$easee = new FordPass($username, $password);
+			$fordpass = new FordPass($region, $username, $password);
 			
 			if($this->ReadPropertyBoolean('SkipSSLCheck')) {
-				$easee->DisableSSLCheck();
+				$fordpass->DisableSSLCheck();
 			}
 			
 			try {
-				$this->SendDebug(IPS_GetName($this->InstanceID), 'Connecting to Easee Cloud API...', 0);
-				$easee->Connect();
-				$token = $easee->GetToken();
+				$this->SendDebug(IPS_GetName($this->InstanceID), 'Connecting to FordPass API...', 0);
+				$fordpass->Connect();
+				$token = fordpass->GetToken();
 				
 				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Saving Token for later use: %s', json_encode($token)), 0);
 				$this->AddTokenToBuffer($token);
@@ -77,12 +77,9 @@ declare(strict_types=1);
 				$this->SetTimerInterval('EaseeHomeRefreshToken' . (string)$this->InstanceID, $expiresIn*1000); 
 				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Token Refresh Timer set to %s second(s)', (string)$expiresIn), 0);
 			} catch(Exception $e) {
-				$this->LogMessage(sprintf('Failed to connect to Easee Cloud API. The error was "%s"',  $e->getMessage()), KL_ERROR);
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Failed to connec to Easee Cloud API. The error was "%s"', $e->getMessage()), 0);
-				return null;
+				$this->LogMessage(sprintf('Failed to connect to FordPass API. The error was "%s"',  $e->getMessage()), KL_ERROR);
+				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Failed to connec to FordPass API. The error was "%s"', $e->getMessage()), 0);
 			}
-	
-			return $easee;
 		}
 
 		private function GetTokenFromBuffer() {

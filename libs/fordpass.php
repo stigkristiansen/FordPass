@@ -33,7 +33,7 @@ class FordPass {
                             "Content-Type:application/x-www-form-urlencoded"
                         );
 
-    public function __construct(string $VIN, string $Region, String $Username='', string $Password='', string $AccessToken='', string $RefreshToken='', DateTime $Expires = null) {
+    public function __construct(string $Region, String $Username='', string $Password='', string $AccessToken='', string $RefreshToken='', DateTime $Expires = null) {
         $this->username = $Username;
         $this->password = $Password;
         $this->VIN = $VIN;
@@ -161,12 +161,12 @@ class FordPass {
     }
 
     // Get the status of the vehicle
-    public function Status() {
+    public function Status(string $VIN) {
         $this->Connect();
         
         $params = array("lrdt" => "01-01-1970 00:00:00");
         $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);//, array('Application-Id:1E8C7794-FF5F-49BC-9596-A1E0C86C5B19')); //Application-Id is region code
-        $url = self::BASE_ENDPOINT . '/vehicles/v4/' . $this->VIN . '/status?' . http_build_query($params);
+        $url = self::BASE_ENDPOINT . '/vehicles/v4/' . $VIN . '/status?' . http_build_query($params);
         
         try {
             $result = $this->request('get', $url, $headers);
@@ -179,11 +179,11 @@ class FordPass {
     }
 
     // Lock/unlock the vehicle
-    public function Lock(bool $State) : bool {
+    public function Lock(string $VIN, bool $State) : bool {
         $this->Connect();
         
         $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);//, array('Application-Id:1E8C7794-FF5F-49BC-9596-A1E0C86C5B19'));
-        $url = self::BASE_ENDPOINT . '/vehicles/v2/' . $this->VIN . '/doors/lock';
+        $url = self::BASE_ENDPOINT . '/vehicles/v2/' . $VIN . '/doors/lock';
         
         try {
             $result = $this->request($State?'put':'delete', $url, $headers);
@@ -196,11 +196,11 @@ class FordPass {
     }
 
     //  Start/stop the vehicle
-    public function Start(bool $State) : bool {
+    public function Start(string $VIN, bool $State) : bool {
         $this->Connect();
 
         $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);
-        $url = self::BASE_ENDPOINT . '/vehicles/v2/' . $this->VIN . '/engine/start';
+        $url = self::BASE_ENDPOINT . '/vehicles/v2/' . $VIN . '/engine/start';
         
         try {
             $result = $this->request($State?'put':'delete', $url, $headers);
@@ -213,11 +213,11 @@ class FordPass {
     }
 
     // Enable/disable SecuriAlert
-    public function Guard(bool $State) {
+    public function Guard(string $VIN, bool $State) {
         $this->Connect();
 
         $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);
-        $url = self::GUARD_ENDPOINT . '/guardmode/v1/' . $this->VIN . '/session';
+        $url = self::GUARD_ENDPOINT . '/guardmode/v1/' . $VIN . '/session';
         
         try {
             $result = $this->request($State?'put':'delete', $url, $headers);
@@ -230,12 +230,12 @@ class FordPass {
     }
 
     // Request status on SecuriAlert
-    public function GuardStatus() {
+    public function GuardStatus(string $VIN) {
         $this->Connect();
         
         $params = array("lrdt" => "01-01-1970 00:00:00");
         $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);//, array('Application-Id:1E8C7794-FF5F-49BC-9596-A1E0C86C5B19')); //Application-Id is region code
-        $url = self::GUARD_ENDPOINT . '/guardmode/v1/' . $this->VIN . '/session?' . http_build_query($params);
+        $url = self::GUARD_ENDPOINT . '/guardmode/v1/' . $VIN . '/session?' . http_build_query($params);
         
         try {
             $result = $this->request('get', $url, $headers);
@@ -248,11 +248,11 @@ class FordPass {
     }
 
     // Send a request to refresh data from the vehicles modules
-    public function RequestUpdate() : bool {
+    public function RequestUpdate(string $VIN) : bool {
         $this->Connect();
 
         $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);
-        $url = self::BASE_ENDPOINT . '/vehicles/v2/' . $this->VIN . '/status';
+        $url = self::BASE_ENDPOINT . '/vehicles/v2/' . $VIN . '/status';
         
         try {
             $result = $this->request('put', $url, $headers);

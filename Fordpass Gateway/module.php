@@ -86,20 +86,35 @@ include __DIR__ . "/../libs/fordpass.php";
 				if(!isset($request->Function)||!isset($request->ChildId)) {
 					throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "Function" and/or "ChildId" is missing. The request was "%s"', $Request));
 				}
-	
+				
+				if(!isset($request->VIN)) {
+					throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "VIN" is missing. The request was "%s"', $Request));
+				}
 				$function = strtolower($request->Function);
-				$childId =  strtolower($request->ChildId);
+				$childId =  $request->ChildId;
+				$VIN = $request->VIN;
 				
 				switch($function) {
-					case 'getproducts':
-						$this->ExecuteFordPassRequest($childId, 'GetProducts');
+					case 'status':
+						$this->ExecuteFordPassRequest($childId, 'Status', array($VIN));
 						break;
-					case 'getchargerstate':
-						if(!isset($request->ChargerId)) {
-							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "ChargerId" is missing. The request was "%s"', $Request));
-						}
-						
-						$this->ExecuteFordPassRequest($childId, 'GetChargerState', array($request->ChargerId));
+					case 'start':
+						if(!isset($request->State) {
+							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $Request));
+												
+						$this->ExecuteFordPassRequest($childId, 'Status', array($VIN, $request->State));
+						break;
+					case 'lock':
+						if(!isset($request->State) {
+							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $Request));
+												
+						$this->ExecuteFordPassRequest($childId, 'Lock', array($VIN, $request->State));
+						break;
+					case 'guard':
+						if(!isset($request->State) {
+							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $Request));
+												
+						$this->ExecuteFordPassRequest($childId, 'Guard', array($VIN, $request->State));
 						break;
 					default:
 						throw new Exception(sprintf('HandleAsyncRequest failed. Unknown function "%s"', $function));

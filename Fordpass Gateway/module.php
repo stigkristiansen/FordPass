@@ -53,8 +53,8 @@ declare(strict_types=1);
 			$password = $this->ReadPropertyString('Password');
 	
 			if(strlen($username)==0) {
-				$this->LogMessage(sprintf('InitEasee(): Missing property "Username" in module "%s"', IPS_GetName($this->InstanceID)), KL_ERROR);
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('InitEasee(): Missing property "Username" in module "%s"', IPS_GetName($this->InstanceID)), 0);
+				$this->LogMessage(sprintf('InitFordPass(): Missing property "Username" in module "%s"', IPS_GetName($this->InstanceID)), KL_ERROR);
+				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('InitFordPass(): Missing property "Username" in module "%s"', IPS_GetName($this->InstanceID)), 0);
 				
 				return null;
 			}

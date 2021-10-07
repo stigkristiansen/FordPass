@@ -11,7 +11,7 @@ declare(strict_types=1);
 		$this->RegisterPropertyString('Username', '');
 		$this->RegisterPropertyString('Password', '');
 		$this->RegisterPropertyString('VIN', '');
-		$this->RegisterPropertyString('Region', 'UK&Europe');
+		$this->RegisterPropertyString('Region', 'UK and Europe');
 
 		$this->RegisterPropertyBoolean('SkipSSLCheck', true);
 

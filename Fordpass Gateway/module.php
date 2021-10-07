@@ -74,7 +74,7 @@ include __DIR__ . "/../libs/fordpass.php";
 				
 				$expiresIn = ($token->ExpiresIn-5*60); // Set to 5 minutes before token timeout
 	
-				$this->SetTimerInterval('EaseeHomeRefreshToken' . (string)$this->InstanceID, $expiresIn*1000); 
+				$this->SetTimerInterval('FordPassRefreshToken' . (string)$this->InstanceID, $expiresIn*1000); 
 				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Token Refresh Timer set to %s second(s)', (string)$expiresIn), 0);
 			} catch(Exception $e) {
 				$this->LogMessage(sprintf('Failed to connect to FordPass API. The error was "%s"',  $e->getMessage()), KL_ERROR);

@@ -5,7 +5,7 @@
 	//include __DIR__ . "/../libs/traits.php";
 	
 		class FordpassVehicle extends IPSModule {
-			use Profiles;
+			//use Profiles;
 	
 			public function Create(){
 				//Never delete this line!

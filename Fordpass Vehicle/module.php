@@ -183,6 +183,8 @@
 					
 					return $request;
 				}
+
+				return [];
 			}
 	
 			private function SetValueEx(string $Ident, $Value) {

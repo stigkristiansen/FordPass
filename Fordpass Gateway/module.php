@@ -146,6 +146,7 @@ include __DIR__ . "/../libs/fordpass.php";
 			}
 	
 			$return['Function'] = $Function;
+			$return['Parameters'] = $Args;
 	
 			try{
 				if($fordpass==null) {

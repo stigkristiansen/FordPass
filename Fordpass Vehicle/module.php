@@ -145,7 +145,17 @@
 						$function = strtolower($data->Buffer->Function);
 						switch($function) {
 							case 'status':
-								var_dump($result);
+								if(isset($result->result->vehiclestatus))) {
+									$vehicle = $result->result->vehiclestatus;
+
+									if(isset($vehicle->lockStatus->value)) {
+										$value = $vehicle->lockStatus->value;
+										if(is_string($value)) {
+											$value = strtolower($value);
+											$this->SetValueEx('Lock', $value=='locked'?true:false);
+										}
+									}
+								}
 								break;
 							case 'guardstatus':
 							

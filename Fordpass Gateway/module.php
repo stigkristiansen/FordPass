@@ -84,11 +84,11 @@ include __DIR__ . "/../libs/fordpass.php";
 			foreach($requests as $request) {
 			
 				if(!isset($request->Function)||!isset($request->ChildId)) {
-					throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "Function" and/or "ChildId" is missing. The request was "%s"', $Request));
+					throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "Function" and/or "ChildId" is missing. The request was "%s"', $request));
 				}
 				
 				if(!isset($request->VIN)) {
-					throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "VIN" is missing. The request was "%s"', $Request));
+					throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "VIN" is missing. The request was "%s"', $request));
 				}
 				$function = strtolower($request->Function);
 				$childId =  $request->ChildId;
@@ -103,21 +103,21 @@ include __DIR__ . "/../libs/fordpass.php";
 						break;
 					case 'start':
 						if(!isset($request->State)) {
-							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $Request));
+							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $request));
 						}
 
 						$this->ExecuteFordPassRequest($childId, 'Status', array($VIN, $request->State));
 						break;
 					case 'lock':
 						if(!isset($request->State)) {
-							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $Request));
+							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $request));
 						}
 
 						$this->ExecuteFordPassRequest($childId, 'Lock', array($VIN, $request->State));
 						break;
 					case 'guard':
 						if(!isset($request->State)) {
-							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $Request));
+							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $request));
 						}
 
 						$this->ExecuteFordPassRequest($childId, 'Guard', array($VIN, $request->State));

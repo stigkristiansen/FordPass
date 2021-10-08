@@ -151,23 +151,29 @@
 							
 								break;
 							case 'start':
-								if(is_bool($result) && !$result) {
-									if(isset($parameters[1]) && is_bool($parameters[1])) {
-										$this->SetValue('Status', !$parameters[1]);
+								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {
+									if($result) {
+										$this->SetValueEx('Start', $parameters[1]);
+									} else {
+										$this->SetValueEx('Start', !$parameters[1]);
 									}
 								}
 								break;
 							case 'lock':
-								if(is_bool($result) && !$result) {
-									if(isset($parameters[1]) && is_bool($parameters[1])) {
-										$this->SetValue('Lock', !$parameters[1]);
+								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {
+									if($result) {
+										$this->SetValueEx('Lock', $parameters[1]);
+									} else {
+										$this->SetValueEx('Lock', !$parameters[1]);
 									}
 								}
 								break;
 							case 'guard':
-								if(is_bool($result) && !$result) {
-									if(isset($parameters[1]) && is_bool($parameters[1])) {
-										$this->SetValue('Guard', !$parameters[1]);
+								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {
+									if($result) {
+										$this->SetValueEx('Guard', $parameters[1]);
+									} else {
+										$this->SetValueEx('Guard', !$parameters[1]);
 									}
 								}
 								break;
@@ -177,7 +183,7 @@
 						
 						$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Processed the result from %s(): %s...', $data->Buffer->Function, json_encode($result)), 0);
 					} else {
-						throw new Exception(sprintf('The gateway returned an error: %s',$result));
+						throw new Exception(sprintf('The gateway returned an error: %s', $result));
 					}
 					
 				} catch(Exception $e) {

@@ -145,7 +145,7 @@
 						$function = strtolower($data->Buffer->Function);
 						switch($function) {
 							case 'status':
-									
+								var_dump($result);
 								break;
 							case 'guardstatus':
 							

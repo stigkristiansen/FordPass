@@ -100,6 +100,7 @@ include __DIR__ . "/../libs/fordpass.php";
 						break;
 					case 'guardstatus':
 						$this->ExecuteFordPassRequest($childId, 'GuardStatus', array($VIN));
+						break;
 					case 'start':
 						if(!isset($request->State)) {
 							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $Request));

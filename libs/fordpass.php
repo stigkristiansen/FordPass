@@ -306,7 +306,7 @@ class FordPass {
             
             while(true) {
                 $result = $this->request('get', $Url, $Headers);
-                var_dump($result);
+                //var_dump($result);
                 if(!isset($result->result->status)) {
                     throw new Exception(sprintf('%s failed. Invalid response. Missing value "status"', $Url));
                 }

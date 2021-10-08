@@ -139,15 +139,23 @@
 							case 'status':
 									
 								break;
+							case 'guardstatus':
+							
+								break;
 							case 'start':
-								
+								if(is_bool($result) && !$result) {
+									$this->SetValue('Status', !$this->GetValueBoolean('Status'));
+								}
 								break;
 							case 'lock':
-								
+								if(is_bool($result) && !$result) {
+									$this->SetValue('Lock', !$this->GetValueBoolean('Lock'));
+								}
 								break;
 							case 'guard':
-								
-								
+								if(is_bool($result) && !$result) {
+									$this->SetValue('Guard', !$this->GetValueBoolean('Guard'));
+								}
 								break;
 							default:
 								throw new Exception(sprintf('Unknown function "%s()" receeived in repsponse from gateway', $function));
@@ -171,6 +179,7 @@
 			private function Refresh(string $VIN) : array{
 				if(strlen($VIN)>0) {
 					$request[] = ['ChildId'=>(string)$this->InstanceID,'Function'=>'Status','VIN'=>$VIN];
+					$request[] = ['ChildId'=>(string)$this->InstanceID,'Function'=>'GuardStatus','VIN'=>$VIN];
 					
 					return $request;
 				}

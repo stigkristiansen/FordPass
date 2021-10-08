@@ -213,7 +213,7 @@ class FordPass {
     }
 
     // Enable/disable SecuriAlert
-    public function Guard(string $VIN, bool $State) {
+    public function Guard(string $VIN, bool $State) : bool {
         $this->Connect();
 
         $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);
@@ -222,7 +222,30 @@ class FordPass {
         try {
             $result = $this->request($State?'put':'delete', $url, $headers);
 
-           return $result;
+           //return $result;
+
+           if($result->httpcode==200) {
+                if(isset($result->result->returnCode)) {
+                    if($result->result->returnCode==200) {
+                        return true;
+                    }
+
+                    if($result->result->returnCode==303 && $State==false) {
+                        return true;
+                    }
+
+                    if($result->result->returnCode==302 && $State==true) {
+                        return true;
+                    }
+
+                    return false;
+
+                } else {
+                    return false;
+                }
+           } else {
+               return false;
+           }
 
         } catch(Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode());

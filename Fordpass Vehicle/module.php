@@ -2,7 +2,7 @@
 
 	declare(strict_types=1);
 	
-	//include __DIR__ . "/../libs/traits.php";
+	include __DIR__ . "/../libs/traits.php";
 	
 		class FordpassVehicle extends IPSModule {
 			//use Profiles;
@@ -12,6 +12,8 @@
 				parent::Create();
 	
 				$this->ConnectParent('{4651EC8E-D0BB-1354-1167-BB7C87729F19}');
+
+				$this->RegisterProfileBoolean('FPV.SecuriAlert', 'Alert', '', '');
 	
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
 				$this->RegisterPropertyString('VIN', '');
@@ -22,7 +24,7 @@
 				$this->RegisterVariableBoolean('Lock', 'Lock', '~Lock', false);
 				$this->EnableAction('Lock');
 
-				$this->RegisterVariableBoolean('Guard', 'SecuriAlert', '~Switch', false);
+				$this->RegisterVariableBoolean('Guard', 'SecuriAlert', 'FPV.SecuriAlert', false);
 				$this->EnableAction('Guard');
 					
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
@@ -33,7 +35,7 @@
 			public function Destroy(){
 				$module = json_decode(file_get_contents(__DIR__ . '/module.json'));
 				if(count(IPS_GetInstanceListByModuleID($module->id))==0) {
-					
+					$this->DeleteProfile('FPV.SecuriAlert');	
 				}
 	
 				//Never delete this line!
@@ -158,7 +160,13 @@
 								}
 								break;
 							case 'guardstatus':
-							
+								if(isset($result->result->gmStatus)) {
+									$gmStatus = $result->result->gmStatus;
+									if(is_string($gmStatus)) {
+										$value = strtolower($gmStatus);
+										$this->SetValueEx('Guard', $value=='disable'?false:true);
+									}
+								}
 								break;
 							case 'start':
 								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {

@@ -118,6 +118,13 @@
 							$msg = 'Missing "Buffer"';
 						}
 					} 
+					if(!isset($data->Buffer->Parameters) ) {
+						if(strlen($msg)>0) {
+							$msg += ', missing "Parameters"';
+						} else {
+							$msg = 'Missing "Parameters"';
+						}
+					} 
 					if(!isset($data->Buffer->Result) ) {
 						if(strlen($msg)>0) {
 							$msg += ', missing "Result"';
@@ -132,6 +139,7 @@
 					
 					$success = $data->Buffer->Success;
 					$result = $data->Buffer->Result;
+					$parameters = $data->Buffer->Parameters;
 	
 					if($success) {
 						$function = strtolower($data->Buffer->Function);
@@ -144,17 +152,23 @@
 								break;
 							case 'start':
 								if(is_bool($result) && !$result) {
-									$this->SetValue('Status', !$this->GetValueBoolean('Status'));
+									if(isset($parameters[1]) && is_bool($parameters[1])) {
+										$this->SetValue('Status', !$parameters[1]);
+									}
 								}
 								break;
 							case 'lock':
 								if(is_bool($result) && !$result) {
-									$this->SetValue('Lock', !$this->GetValueBoolean('Lock'));
+									if(isset($parameters[1]) && is_bool($parameters[1])) {
+										$this->SetValue('Lock', !$parameters[1]);
+									}
 								}
 								break;
 							case 'guard':
 								if(is_bool($result) && !$result) {
-									$this->SetValue('Guard', !$this->GetValueBoolean('Guard'));
+									if(isset($parameters[1]) && is_bool($parameters[1])) {
+										$this->SetValue('Guard', !$parameters[1]);
+									}
 								}
 								break;
 							default:

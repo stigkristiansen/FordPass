@@ -145,7 +145,7 @@
 						$function = strtolower($data->Buffer->Function);
 						switch($function) {
 							case 'status':
-								if(isset($result->result->vehiclestatus))) {
+								if(isset($result->result->vehiclestatus)) {
 									$vehicle = $result->result->vehiclestatus;
 
 									if(isset($vehicle->lockStatus->value)) {

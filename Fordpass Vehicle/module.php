@@ -17,6 +17,7 @@
 				$this->RegisterProfileBoolean('FPV.SecuriAlert', 'Alert', '', '');
 					
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
+				$this->RegisterPropertyInteger('ForceInterval', 0);
 				$this->RegisterPropertyString('VIN', '');
 					
 				$this->RegisterVariableBoolean('Start', 'Start', '~Switch', false);
@@ -29,6 +30,7 @@
 				$this->EnableAction('Guard');
 					
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
+				$this->RegisterTimer('FordPassForce' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Force", 0);'); 
 	
 				$this->RegisterMessage(0, IPS_KERNELMESSAGE);
 			}
@@ -79,6 +81,9 @@
 							$request = $this->Refresh($VIN);
 							//$this->InitTimer(); // Reset timer back to configured interval
 							break;
+						case 'force':
+							$request[] = ['Function'=>'RequestUpdate','VIN'=>$VIN, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
+							break;		
 						case 'lock':
 							$this->SetValue($Ident, $Value);
 							$request[] = ['Function'=>'Lock', 'VIN'=>$VIN, 'State'=>$Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
@@ -224,13 +229,14 @@
 	
 			private function InitTimer(){
 				$this->SetTimerInterval('FordPassRefresh' . (string)$this->InstanceID, $this->ReadPropertyInteger('UpdateInterval')*1000); 
+				$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, $this->ReadPropertyInteger('ForceInterval')*1000); 
 			}
 	
 			private function Refresh(string $VIN) : array{
 				if(strlen($VIN)>0) {
-					//$guid=self::GUID();
-					$request[] = ['Function'=>'Status','VIN'=>$VIN, 'RequestId'=>self::GUID(), 'ChildId'=>(string)$this->InstanceID];
-					$request[] = ['Function'=>'GuardStatus','VIN'=>$VIN, 'RequestId'=>self::GUID(), 'ChildId'=>(string)$this->InstanceID];
+					$guid=self::GUID();
+					$request[] = ['Function'=>'Status','VIN'=>$VIN, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
+					$request[] = ['Function'=>'GuardStatus','VIN'=>$VIN, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 					
 					return $request;
 				}

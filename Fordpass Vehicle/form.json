@@ -12,6 +12,9 @@
         },
         {
             "type": "NumberSpinner", "name": "UpdateInterval", "minimum":15, "caption": "Refresh Interval", "suffix": "seconds"
+        },
+        {
+            "type": "NumberSpinner", "name": "ForceInterval", "minimum":0, "caption": "Request Update Interval", "suffix": "seconds"
         }
 
     ],

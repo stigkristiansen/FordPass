@@ -137,7 +137,7 @@ include __DIR__ . "/../libs/fordpass.php";
 			}
 		}
 
-		private function ExecuteFordPassRequest(string $ChildId, string RequestId, string $Function, array $Args=null) {
+		private function ExecuteFordPassRequest(string $ChildId, string $RequestId, string $Function, array $Args=null) {
 		
 			$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Executing FordPass::%s() for component %s. Request id is %s...', $Function, isset($Args[0])?$Args[0]:'N/A', $RequestId), 0);
 	

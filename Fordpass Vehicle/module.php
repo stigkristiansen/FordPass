@@ -227,8 +227,8 @@
 			private function Refresh(string $VIN) : array{
 				if(strlen($VIN)>0) {
 					$guid=self::GUID();
-					$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>guid,'Function'=>'Status','VIN'=>$VIN];
-					$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>guid, 'Function'=>'GuardStatus','VIN'=>$VIN];
+					$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>$guid,'Function'=>'Status','VIN'=>$VIN];
+					$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>$guid, 'Function'=>'GuardStatus','VIN'=>$VIN];
 					
 					return $request;
 				}

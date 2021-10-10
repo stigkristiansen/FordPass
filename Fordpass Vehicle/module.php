@@ -162,8 +162,10 @@
 						$function = strtolower($data->Buffer->Function);
 						switch($function) {
 							case 'requestupdate':
+								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								break;
 							case 'status':
+								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								if(isset($result->result->vehiclestatus)) {
 									$vehicle = $result->result->vehiclestatus;
 
@@ -177,10 +179,9 @@
 								}
 								break;
 							case 'guardstatus':
-								$this->SendDebug(IPS_GetName($this->InstanceID), 'Handling GuardStatus()...', 0);
+								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								if(isset($result->result->session->gmStatus)) {
-									$gmStatus = $result->session->gmStatus;
-									$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('gmStatus is %s', $gmStatus), 0);
+									$gmStatus = $result->result->session->gmStatus;
 									if(is_string($gmStatus)) {
 										$value = strtolower($gmStatus);
 										$this->SetValueEx('Guard', $value=='disable'?false:true);
@@ -188,6 +189,7 @@
 								}
 								break;
 							case 'start':
+								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {
 									if($result) {
 										$this->SetValueEx('Start', $parameters[1]);
@@ -197,6 +199,7 @@
 								}
 								break;
 							case 'lock':
+								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {
 									if($result) {
 										$this->SetValueEx('Lock', $parameters[1]);
@@ -206,6 +209,7 @@
 								}
 								break;
 							case 'guard':
+								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {
 									if($result) {
 										$this->SetValueEx('Guard', $parameters[1]);

@@ -89,7 +89,7 @@
 							break;
 						case 'guard':
 							$this->SetValue($Ident, $Value);
-							$request[] = ['Function'=>'Guard', 'VIN'=>$VIN, 'State'=>$Value], 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
+							$request[] = ['Function'=>'Guard', 'VIN'=>$VIN, 'State'=>$Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 							break;
 						default:
 							throw new Exception(sprintf('ReqestAction called with unkown Ident "%s"', $Ident));

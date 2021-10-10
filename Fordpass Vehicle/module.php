@@ -206,10 +206,10 @@
 								}
 								break;
 							default:
-								throw new Exception(sprintf('Unknown function "%s()" receeived in repsponse from gateway', $function));
+								throw new Exception(sprintf('Unknown function "%s()" receeived in repsponse with request id %s from gateway', $function, $requestId));
 						}
 						
-						$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Processed the result from %s(): %s...', $data->Buffer->Function, json_encode($result)), 0);
+						$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Processed the result from %s() for request id %s: %s...', $data->Buffer->Function, $requestId,json_encode($result)), 0);
 					} else {
 						throw new Exception(sprintf('The gateway returned an error on request id %s: %s', $requestId, $result));
 					}

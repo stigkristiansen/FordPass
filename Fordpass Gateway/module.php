@@ -157,6 +157,8 @@ include __DIR__ . "/../libs/fordpass.php";
 					$fordpass->DisableSSLCheck();
 				}
 	
+				$this->LogMessage(sprintf('Executing function "%s"...', $Function));
+
 				if($Args == null) {
 					$result = call_user_func(array($fordpass, $Function));
 				} else {
@@ -178,7 +180,7 @@ include __DIR__ . "/../libs/fordpass.php";
 				$return['Result'] = $result;
 			}
 			
-			$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Sending the result back to the child with Id %s', (string)$ChildId), 0);
+			$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Sending the result back to the child with Id %s. Result sendt is "%s"', (string)$ChildId, json_encode($return)), 0);
 			$this->SendDataToChildren(json_encode(["DataID" => "{677E0420-B69C-597E-C909-39877953E1DC}", "ChildId" => $ChildId, "Buffer" => $return]));
 		}
 	

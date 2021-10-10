@@ -14,8 +14,7 @@
 				$this->ConnectParent('{4651EC8E-D0BB-1354-1167-BB7C87729F19}');
 
 				$this->RegisterProfileBoolean('FPV.SecuriAlert', 'Alert', '', '');
-				
-	
+					
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
 				$this->RegisterPropertyString('VIN', '');
 					

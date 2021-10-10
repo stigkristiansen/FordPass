@@ -81,15 +81,15 @@
 							break;
 						case 'lock':
 							$this->SetValue($Ident, $Value);
-							$request[] = ['Function'=>'Lock','VIN'=>$VIN, 'State' => $Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
+							$request[] = ['Function'=>'Lock', 'VIN'=>$VIN, 'State'=>$Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 							break;
 						case 'start':
 							$this->SetValue($Ident, $Value);
-							$request[] = ['Function'=>'Start','VIN'=>$VIN, 'State' => $Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID,];
+							$request[] = ['Function'=>'Start', 'VIN'=>$VIN, 'State'=>$Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 							break;
 						case 'guard':
 							$this->SetValue($Ident, $Value);
-							$request[] = ['Function'=>'Guard','VIN'=>$VIN, 'State' => $Value], 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID;
+							$request[] = ['Function'=>'Guard', 'VIN'=>$VIN, 'State'=>$Value], 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 							break;
 						default:
 							throw new Exception(sprintf('ReqestAction called with unkown Ident "%s"', $Ident));

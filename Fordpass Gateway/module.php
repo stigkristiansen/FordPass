@@ -157,7 +157,7 @@ include __DIR__ . "/../libs/fordpass.php";
 					$fordpass->DisableSSLCheck();
 				}
 	
-				$this->LogMessage(sprintf('Executing function "%s"...', $Function));
+				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Executing function "%s"...', $Function), 0);
 
 				if($Args == null) {
 					$result = call_user_func(array($fordpass, $Function));

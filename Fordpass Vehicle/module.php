@@ -179,7 +179,7 @@
 							case 'guardstatus':
 								if(isset($result->result->gmStatus)) {
 									$gmStatus = $result->result->gmStatus;
-									$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('gmStatus is %s', $gmStatus)), 0);
+									$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('gmStatus is %s', $gmStatus), 0);
 									if(is_string($gmStatus)) {
 										$value = strtolower($gmStatus);
 										$this->SetValueEx('Guard', $value=='disable'?false:true);

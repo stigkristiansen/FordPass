@@ -6,6 +6,7 @@
 	
 		class FordpassVehicle extends IPSModule {
 			use Profiles;
+			use Utility;
 	
 			public function Create(){
 				//Never delete this line!
@@ -72,6 +73,7 @@
 					}
 	
 					$request = null;
+					$guid = self::GUID();
 					switch (strtolower($Ident)) {
 						case 'refresh':
 							$request = $this->Refresh($VIN);
@@ -79,22 +81,22 @@
 							break;
 						case 'lock':
 							$this->SetValue($Ident, $Value);
-							$request[] = ['ChildId'=>(string)$this->InstanceID,'Function'=>'Lock','VIN'=>$VIN, 'State' => $Value];
+							$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>$guid,'Function'=>'Lock','VIN'=>$VIN, 'State' => $Value];
 							break;
 						case 'start':
 							$this->SetValue($Ident, $Value);
-							$request[] = ['ChildId'=>(string)$this->InstanceID,'Function'=>'Start','VIN'=>$VIN, 'State' => $Value];
+							$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>$guid,'Function'=>'Start','VIN'=>$VIN, 'State' => $Value];
 							break;
 						case 'guard':
 							$this->SetValue($Ident, $Value);
-							$request[] = ['ChildId'=>(string)$this->InstanceID,'Function'=>'Guard','VIN'=>$VIN, 'State' => $Value];
+							$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>$guid,'Function'=>'Guard','VIN'=>$VIN, 'State' => $Value];
 							break;
 						default:
 							throw new Exception(sprintf('ReqestAction called with unkown Ident "%s"', $Ident));
 					}
 	
 					if($request!=null) {
-						$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Sending a request to the gateway: %s', json_encode($request)), 0);
+						$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Sending a request with id %s to the gateway. Request is "%s"', $guid, json_encode($request)), 0);
 						$this->SendDataToParent(json_encode(['DataID' => '{047CD9E9-0492-37DF-0955-3DF2F006F0A2}', 'Buffer' => $request]));
 					}
 	
@@ -115,21 +117,28 @@
 					} 
 					if(!isset($data->Buffer->Success) ) {
 						if(strlen($msg)>0) {
-							$msg += ', missing "Buffer"';
+							$msg += ', "Buffer"';
 						} else {
 							$msg = 'Missing "Buffer"';
 						}
 					} 
 					if(!isset($data->Buffer->Parameters) ) {
 						if(strlen($msg)>0) {
-							$msg += ', missing "Parameters"';
+							$msg += ', "Parameters"';
 						} else {
 							$msg = 'Missing "Parameters"';
 						}
 					} 
+					if(!isset($data->Buffer->RequestId) ) {
+						if(strlen($msg)>0) {
+							$msg += ', "RequestId"';
+						} else {
+							$msg = 'Missing "RequestId"';
+						}
+					} 
 					if(!isset($data->Buffer->Result) ) {
 						if(strlen($msg)>0) {
-							$msg += ', missing "Result"';
+							$msg += 'and "Result"';
 						} else {
 							$msg = 'Missing "Result"';
 						}
@@ -141,9 +150,10 @@
 					
 					$success = $data->Buffer->Success;
 					$result = $data->Buffer->Result;
-					$parameters = $data->Buffer->Parameters;
+					$requestId = $data->Buffer->RequestId;
 	
 					if($success) {
+						$parameters = $data->Buffer->Parameters;
 						$function = strtolower($data->Buffer->Function);
 						switch($function) {
 							case 'status':
@@ -201,7 +211,7 @@
 						
 						$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Processed the result from %s(): %s...', $data->Buffer->Function, json_encode($result)), 0);
 					} else {
-						throw new Exception(sprintf('The gateway returned an error: %s', $result));
+						throw new Exception(sprintf('The gateway returned an error on request id %s: %s', $requestId, $result));
 					}
 					
 				} catch(Exception $e) {
@@ -216,8 +226,9 @@
 	
 			private function Refresh(string $VIN) : array{
 				if(strlen($VIN)>0) {
-					$request[] = ['ChildId'=>(string)$this->InstanceID,'Function'=>'Status','VIN'=>$VIN];
-					$request[] = ['ChildId'=>(string)$this->InstanceID,'Function'=>'GuardStatus','VIN'=>$VIN];
+					$guid=self::GUID();
+					$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>guid,'Function'=>'Status','VIN'=>$VIN];
+					$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>guid, 'Function'=>'GuardStatus','VIN'=>$VIN];
 					
 					return $request;
 				}

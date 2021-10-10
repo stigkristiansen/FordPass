@@ -90,37 +90,46 @@ include __DIR__ . "/../libs/fordpass.php";
 				if(!isset($request->VIN)) {
 					throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "VIN" is missing. The request was "%s"', $request));
 				}
+
+				if(!isset($request->RequestId)) {
+					throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "RequestId" is missing. The request was "%s"', $request));
+				}
+
 				$function = strtolower($request->Function);
 				$childId =  $request->ChildId;
 				$VIN = $request->VIN;
+				$requestId = $request->RequestId;
 				
 				switch($function) {
+					case 'requestupdate':
+						$this->ExecuteFordPassRequest($childId, $requestId, 'RequestUpdate', array($VIN));
+						break;
 					case 'status':
-						$this->ExecuteFordPassRequest($childId, 'Status', array($VIN));
+						$this->ExecuteFordPassRequest($childId, $requestId, 'Status', array($VIN));
 						break;
 					case 'guardstatus':
-						$this->ExecuteFordPassRequest($childId, 'GuardStatus', array($VIN));
+						$this->ExecuteFordPassRequest($childId, $requestId, 'GuardStatus', array($VIN));
 						break;
 					case 'start':
 						if(!isset($request->State)) {
 							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $request));
 						}
 
-						$this->ExecuteFordPassRequest($childId, 'Status', array($VIN, $request->State));
+						$this->ExecuteFordPassRequest($childId, $requestId, 'Start', array($VIN, $request->State));
 						break;
 					case 'lock':
 						if(!isset($request->State)) {
 							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $request));
 						}
 
-						$this->ExecuteFordPassRequest($childId, 'Lock', array($VIN, $request->State));
+						$this->ExecuteFordPassRequest($childId, $requestId, 'Lock', array($VIN, $request->State));
 						break;
 					case 'guard':
 						if(!isset($request->State)) {
 							throw new Exception(sprintf('HandleAsyncRequest: Invalid formated request. Key "State" is missing. The request was "%s"', $request));
 						}
 
-						$this->ExecuteFordPassRequest($childId, 'Guard', array($VIN, $request->State));
+						$this->ExecuteFordPassRequest($childId,  $requestId, 'Guard', array($VIN, $request->State));
 						break;
 					default:
 						throw new Exception(sprintf('HandleAsyncRequest failed. Unknown function "%s"', $function));
@@ -128,9 +137,9 @@ include __DIR__ . "/../libs/fordpass.php";
 			}
 		}
 
-		private function ExecuteFordPassRequest(string $ChildId, string $Function, array $Args=null) {
+		private function ExecuteFordPassRequest(string $ChildId, string RequestId, string $Function, array $Args=null) {
 		
-			$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Executing FordPass::%s() for component with id %s...', $Function, isset($Args[0])?$Args[0]:'N/A'), 0);
+			$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Executing FordPass::%s() for component %s. Request id is %s...', $Function, isset($Args[0])?$Args[0]:'N/A', $RequestId), 0);
 	
 			$fordpass = null;
 					
@@ -147,6 +156,7 @@ include __DIR__ . "/../libs/fordpass.php";
 	
 			$return['Function'] = $Function;
 			$return['Parameters'] = $Args;
+			$return['RequestId'] = $RequestId;
 	
 			try{
 				if($fordpass==null) {
@@ -157,7 +167,7 @@ include __DIR__ . "/../libs/fordpass.php";
 					$fordpass->DisableSSLCheck();
 				}
 	
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Executing function "%s"...', $Function), 0);
+				//$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Executing function "%s" ...', $Function), 0);
 
 				if($Args == null) {
 					$result = call_user_func(array($fordpass, $Function));
@@ -168,8 +178,8 @@ include __DIR__ . "/../libs/fordpass.php";
 				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('FordPass API returned "%s" for %s()', json_encode($result), $Function), 0);
 				
 			} catch(Exception $e) {
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('ExecuteFordPassRequest() failed for function %s(). The error was "%s:%d"', $Function, $e->getMessage(), $e->getCode()), 0);
-				$this->LogMessage(sprintf('ExecuteFordPassRequest() failed for function %s(). The error was "%s"', $Function, $e->getMessage()), KL_ERROR);
+				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('ExecuteFordPassRequest() failed for function %s() in request id %s. The error was "%s:%d"', $Function, $RequestId, $e->getMessage(), $e->getCode()), 0);
+				$this->LogMessage(sprintf('ExecuteFordPassRequest() failed for function %s() in request id %s. The error was "%s"', $Function, $RequestId,$e->getMessage()), KL_ERROR);
 				
 				$return['Success'] = false;
 				$return['Result'] = $e->getMessage();

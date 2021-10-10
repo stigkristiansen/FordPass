@@ -77,19 +77,19 @@
 					switch (strtolower($Ident)) {
 						case 'refresh':
 							$request = $this->Refresh($VIN);
-							$this->InitTimer(); // Reset timer back to configured interval
+							//$this->InitTimer(); // Reset timer back to configured interval
 							break;
 						case 'lock':
 							$this->SetValue($Ident, $Value);
-							$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>$guid,'Function'=>'Lock','VIN'=>$VIN, 'State' => $Value];
+							$request[] = ['Function'=>'Lock','VIN'=>$VIN, 'State' => $Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 							break;
 						case 'start':
 							$this->SetValue($Ident, $Value);
-							$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>$guid,'Function'=>'Start','VIN'=>$VIN, 'State' => $Value];
+							$request[] = ['Function'=>'Start','VIN'=>$VIN, 'State' => $Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID,];
 							break;
 						case 'guard':
 							$this->SetValue($Ident, $Value);
-							$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>$guid,'Function'=>'Guard','VIN'=>$VIN, 'State' => $Value];
+							$request[] = ['Function'=>'Guard','VIN'=>$VIN, 'State' => $Value], 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID;
 							break;
 						default:
 							throw new Exception(sprintf('ReqestAction called with unkown Ident "%s"', $Ident));
@@ -156,6 +156,8 @@
 						$parameters = $data->Buffer->Parameters;
 						$function = strtolower($data->Buffer->Function);
 						switch($function) {
+							case 'requestupdate':
+								break;
 							case 'status':
 								if(isset($result->result->vehiclestatus)) {
 									$vehicle = $result->result->vehiclestatus;
@@ -226,9 +228,9 @@
 	
 			private function Refresh(string $VIN) : array{
 				if(strlen($VIN)>0) {
-					$guid=self::GUID();
-					$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>$guid,'Function'=>'Status','VIN'=>$VIN];
-					$request[] = ['ChildId'=>(string)$this->InstanceID,'RequestId'=>$guid, 'Function'=>'GuardStatus','VIN'=>$VIN];
+					//$guid=self::GUID();
+					$request[] = ['Function'=>'Status','VIN'=>$VIN, 'RequestId'=>self::GUID(), 'ChildId'=>(string)$this->InstanceID];
+					$request[] = ['Function'=>'GuardStatus','VIN'=>$VIN, 'RequestId'=>self::GUID(), 'ChildId'=>(string)$this->InstanceID];
 					
 					return $request;
 				}

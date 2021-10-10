@@ -178,8 +178,8 @@
 								break;
 							case 'guardstatus':
 								$this->SendDebug(IPS_GetName($this->InstanceID), 'Handling GuardStatus()...', 0);
-								if(isset($result->result->gmStatus)) {
-									$gmStatus = $result->result->gmStatus;
+								if(isset($result->result['gmStatus'])) {
+									$gmStatus = $result->result['gmStatus'];
 									$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('gmStatus is %s', $gmStatus), 0);
 									if(is_string($gmStatus)) {
 										$value = strtolower($gmStatus);

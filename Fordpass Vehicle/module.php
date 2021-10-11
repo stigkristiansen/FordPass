@@ -183,12 +183,12 @@
 
 									if(isset($vehicle->odometer->value)) {
 										$value = $vehicle->odometer->value;
-										if(is_float($value)) {
+										//if(is_float($value)) {
 											$this->SetValueEx('Odometer', $value);
-										}
+										//}
 									}
 
-									
+
 								}
 								break;
 							case 'guardstatus':

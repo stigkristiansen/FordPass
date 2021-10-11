@@ -16,6 +16,7 @@
 
 				$this->RegisterProfileBoolean('FPV.SecuriAlert', 'Alert', '', '');
 				$this->RegisterProfileFloat('FPV.Odometer', 'Information', '', ' km');
+				$this->RegisterProfileFloat('FPV.BatteryFillLevel', 'Electricity', '', ' %');
 					
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
 				$this->RegisterPropertyInteger('ForceInterval', 0);
@@ -31,6 +32,8 @@
 				$this->EnableAction('Guard');
 
 				$this->RegisterVariableFloat('Odometer', 'Total distance', 'FPV.Odometer', 4);
+				$this->RegisterVariableFloat('BatteryFillLevel', 'Battery Fill Level', 'FPV.BatteryFillLevel', 5);
+				
 					
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
 				$this->RegisterTimer('FordPassForce' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Force", 0);'); 
@@ -43,6 +46,7 @@
 				if(count(IPS_GetInstanceListByModuleID($module->id))==0) {
 					$this->DeleteProfile('FPV.SecuriAlert');	
 					$this->DeleteProfile('FPV.Odometer');
+					$this->DeleteProfile('FPV.BatteryFillLevel');
 				}
 	
 				//Never delete this line!
@@ -176,19 +180,25 @@
 									if(isset($vehicle->lockStatus->value)) {
 										$value = $vehicle->lockStatus->value;
 										if(is_string($value)) {
-											$value = strtolower($value);
-											$this->SetValueEx('Lock', $value=='locked'?true:false);
+											$this->SetValueEx('Lock', strtolower($value)=='locked'?true:false);
 										}
 									}
 
 									if(isset($vehicle->odometer->value)) {
 										$value = $vehicle->odometer->value;
-										//if(is_float($value)) {
-											$this->SetValueEx('Odometer', $value);
-										//}
+										if(is_numeric($value)) {
+											$this->SetValueEx('Odometer', (float)$value);
+										}
 									}
 
+									if(isset($vehicle->batteryFillLevel->value)) {
+										$value = $vehicle->batteryFillLevel->value;
+										if(is_numeric($value)) {
+											$this->SetValueEx('BatteryFillLevel', (float)$value);
+										}
+									}
 
+									
 								}
 								break;
 							case 'guardstatus':

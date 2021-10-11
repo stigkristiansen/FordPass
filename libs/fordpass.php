@@ -306,9 +306,6 @@ class FordPass {
             
             for($count=1;$count<50;$count++) {
                 IPS_LogMessage('Lock', sprintf('Loop Count: %s', (string)$count));
-                if($count>100) {
-                    return false;
-                }
                 $result = $this->request('get', $Url, $Headers);
                 IPS_LogMessage('Lock', json_encode($result));
                 if(!isset($result->result->status)) {
@@ -324,7 +321,7 @@ class FordPass {
             }
         }
 
-        throw new Exception(sprintf('%s failed. The error code was "%s"', $Url, (string)$Result->httpcode));
+        return false;
 
     }
        

@@ -219,7 +219,7 @@
 									if(isset($vehicle->plugStatus->value)) {
 										$value = $vehicle->plugStatus->value;
 										if(is_numeric($value)) {
-											$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('plugStatus is %s ', (string)$value), 0);
+											//$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('plugStatus is %s ', (string)$value), 0);
 											if($value==1) {
 												$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, $this->ReadPropertyInteger('ForceInterval')*1000); 
 											} else {
@@ -252,7 +252,7 @@
 										$tailgateDoor=false;
 										foreach ($vehicle->doorStatus as $doorId => $door) {
 											if(isset($door->value) && is_string($door->value)) {
-												$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Analyzing %s', $doorId), 0);
+												//$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Analyzing %s', $doorId), 0);
 												switch($doorId) {
 													case 'rightRearDoor':
 														$rightRearDoor = strtolower($door->value)=='closed'?true:false;
@@ -273,10 +273,11 @@
 														$tailgateDoor = strtolower($door->value)=='closed'?true:false;
 														break;
 												}
-												$value = $rightRearDoor && $leftRearDoor && $driverDoor && $passengerDoor && $hoodDoor && $tailgateDoor;
-												$this->SetValueEx('DoorStatus', $value);
+												
 											}
 										}
+										$value = $rightRearDoor && $leftRearDoor && $driverDoor && $passengerDoor && $hoodDoor && $tailgateDoor;
+										$this->SetValueEx('DoorStatus', $value);
 									}
 								}
 								break;

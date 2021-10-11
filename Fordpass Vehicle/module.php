@@ -15,19 +15,22 @@
 				$this->ConnectParent('{4651EC8E-D0BB-1354-1167-BB7C87729F19}');
 
 				$this->RegisterProfileBoolean('FPV.SecuriAlert', 'Alert', '', '');
+				$this->RegisterProfileFloat('FPV.Odometer', 'Information', '', ' km');
 					
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
 				$this->RegisterPropertyInteger('ForceInterval', 0);
 				$this->RegisterPropertyString('VIN', '');
 					
-				$this->RegisterVariableBoolean('Start', 'Start', '~Switch', false);
+				$this->RegisterVariableBoolean('Start', 'Start', '~Switch', 1);
 				$this->EnableAction('Start');
 
-				$this->RegisterVariableBoolean('Lock', 'Lock', '~Lock', false);
+				$this->RegisterVariableBoolean('Lock', 'Lock', '~Lock', 2);
 				$this->EnableAction('Lock');
 
-				$this->RegisterVariableBoolean('Guard', 'SecuriAlert', 'FPV.SecuriAlert', false);
+				$this->RegisterVariableBoolean('Guard', 'SecuriAlert', 'FPV.SecuriAlert', 3);
 				$this->EnableAction('Guard');
+
+				$this->RegisterVariableFloat('Odometer', 'Total distance', 'FPV.Odometer', 4);
 					
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
 				$this->RegisterTimer('FordPassForce' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Force", 0);'); 
@@ -39,6 +42,7 @@
 				$module = json_decode(file_get_contents(__DIR__ . '/module.json'));
 				if(count(IPS_GetInstanceListByModuleID($module->id))==0) {
 					$this->DeleteProfile('FPV.SecuriAlert');	
+					$this->DeleteProfile('FPV.Odometer');
 				}
 	
 				//Never delete this line!
@@ -176,6 +180,15 @@
 											$this->SetValueEx('Lock', $value=='locked'?true:false);
 										}
 									}
+
+									if(isset($vehicle->odometer->value)) {
+										$value = $vehicle->odometer->value;
+										if(is_float($value)) {
+											$this->SetValueEx('Odometer', $value);
+										}
+									}
+
+									
 								}
 								break;
 							case 'guardstatus':

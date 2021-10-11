@@ -304,9 +304,16 @@ class FordPass {
 
             $Url .= '/'. $Result->result->commandId;                    
             
-            while(true) {
+            $break = false;
+            $count = 0;
+            while(!$break) {
+                $count++;
+                IPS_LogMessage('Lock', sprintf('Loop Count: %s', (string)$count));
+                if($count>100) {
+                    return false;
+                }
                 $result = $this->request('get', $Url, $Headers);
-                //var_dump($result);
+                IPS_LogMessage('Lock', json_encode($result));
                 if(!isset($result->result->status)) {
                     throw new Exception(sprintf('%s failed. Invalid response. Missing value "status"', $Url));
                 }

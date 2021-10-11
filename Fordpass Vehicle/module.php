@@ -269,7 +269,7 @@
 	
 			private function InitTimer(){
 				$this->SetTimerInterval('FordPassRefresh' . (string)$this->InstanceID, $this->ReadPropertyInteger('UpdateInterval')*1000); 
-				$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, 1000; 
+				$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, 1000); 
 			}
 	
 			private function Refresh(string $VIN) : array{

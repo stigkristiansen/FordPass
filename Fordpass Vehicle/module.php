@@ -19,7 +19,8 @@
 				$this->RegisterProfileFloat('FPV.BatteryFillLevel', 'Electricity', '', ' %');
 					
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
-				$this->RegisterPropertyInteger('ForceInterval', 0);
+				$this->RegisterPropertyInteger('ForceInterval', 15);
+				$this->RegisterPropertyInteger('ForceIntervalDisconnected', 15);
 				$this->RegisterPropertyString('VIN', '');
 					
 				$this->RegisterVariableBoolean('Start', 'Start', '~Switch', 1);
@@ -198,7 +199,17 @@
 										}
 									}
 
-									
+									if(isset($vehicle->plugStatus->value)) {
+										$value = $vehicle->plugStatus->value;
+										if(is_numeric($value)) {
+											if($value==1) {
+												$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, $this->ReadPropertyInteger('ForceInterval')*1000); 
+											} else {
+												// Throttle RequestUpdate
+												$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, $this->ReadPropertyInteger('ForceIntervalDisconnected')*60*1000); 
+											}
+										}
+									}
 								}
 								break;
 							case 'guardstatus':
@@ -258,7 +269,7 @@
 	
 			private function InitTimer(){
 				$this->SetTimerInterval('FordPassRefresh' . (string)$this->InstanceID, $this->ReadPropertyInteger('UpdateInterval')*1000); 
-				$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, $this->ReadPropertyInteger('ForceInterval')*1000); 
+				$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, 1000; 
 			}
 	
 			private function Refresh(string $VIN) : array{

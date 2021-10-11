@@ -273,11 +273,9 @@
 												}
 												$value = $rightRearDoor && $leftRearDoor && $driverDoor && $passengerDoor && $hoodDoor && $tailgateDoor;
 												$this->SetValueEx('DoorStatus', $value);
-												}
 											}
 										}
 									}
-
 								}
 								break;
 							case 'guardstatus':

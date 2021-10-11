@@ -21,6 +21,13 @@
 					[true, 'OK', 'Ok', -1],
 					[false, 'Check condition', 'Warning', -1]
 				]);
+
+				$this->RegisterProfileBooleanEx('FPV.IgnitionStatus', 'Key', '', '', [
+					[true, 'Running', '', -1],
+					[false, 'Stopped', '', -1]
+				]);
+
+				ignitionStatus
 				
 					
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
@@ -40,8 +47,8 @@
 				$this->RegisterVariableFloat('Odometer', 'Total distance', 'FPV.Odometer', 4);
 				$this->RegisterVariableFloat('BatteryFillLevel', 'Battery Fill Level', 'FPV.BatteryFillLevel', 5);
 				$this->RegisterVariableBoolean('TirePressure', 'Tire Pressure', 'FPV.Status', 6);
-				
-					
+				$this->RegisterVariableBoolean('IgnitionStatus', 'Ignition', 'FPV.IgnitionStatus', 7);
+									
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
 				$this->RegisterTimer('FordPassForce' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Force", 0);'); 
 	
@@ -55,6 +62,7 @@
 					$this->DeleteProfile('FPV.Odometer');
 					$this->DeleteProfile('FPV.BatteryFillLevel');
 					$this->DeleteProfile('FPV.Status');
+					$this->DeleteProfile('FPV.IgnitionStatus');
 				}
 	
 				//Never delete this line!
@@ -222,6 +230,13 @@
 										$value = $vehicle->tirePressure->value;
 										if(is_string($value)) {
 											$this->SetValueEx('TirePressure', strtolower($value)=='status_good'?true:false);
+										}
+									}
+
+									if(isset($vehicle->ignitionStatus->value)) {
+										$value = $vehicle->ignitionStatus->value;
+										if(is_string($value)) {
+											$this->SetValueEx('IgnitionStatus', strtolower($value)=='off'?false:true);
 										}
 									}
 								}

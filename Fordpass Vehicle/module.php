@@ -17,6 +17,11 @@
 				$this->RegisterProfileBoolean('FPV.SecuriAlert', 'Alert', '', '');
 				$this->RegisterProfileFloat('FPV.Odometer', 'Information', '', ' km');
 				$this->RegisterProfileFloat('FPV.BatteryFillLevel', 'Electricity', '', ' %');
+				$this->RegisterProfileBooleanEx('FPV.Status', 'Information', '', '', [
+					[true, 'OK', 'Ok', -1],
+					[false, 'Check condition', 'Warning', -1]
+				]);
+				
 					
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
 				$this->RegisterPropertyInteger('ForceInterval', 15);
@@ -34,6 +39,7 @@
 
 				$this->RegisterVariableFloat('Odometer', 'Total distance', 'FPV.Odometer', 4);
 				$this->RegisterVariableFloat('BatteryFillLevel', 'Battery Fill Level', 'FPV.BatteryFillLevel', 5);
+				$this->RegisterVariableBoolean('TirePressure', 'Tire Pressure', 'FPV.Status', 6);
 				
 					
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
@@ -48,6 +54,7 @@
 					$this->DeleteProfile('FPV.SecuriAlert');	
 					$this->DeleteProfile('FPV.Odometer');
 					$this->DeleteProfile('FPV.BatteryFillLevel');
+					$this->DeleteProfile('FPV.Status');
 				}
 	
 				//Never delete this line!
@@ -171,7 +178,7 @@
 						$function = strtolower($data->Buffer->Function);
 						switch($function) {
 							case 'requestupdate':
-								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
+								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...Nothing to do', $data->Buffer->Function), 0);
 								break;
 							case 'status':
 								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
@@ -210,8 +217,14 @@
 											}
 										}
 									}
-								}
-								break;
+
+									if(isset($vehicle->tirePressure->value)) {
+										$value = $vehicle->tirePressure->value;
+										if(is_string($value)) {
+											$this->SetValueEx('TirePressure', strtolower($value)=='status_good'?true:false);
+										}
+									}
+									break;
 							case 'guardstatus':
 								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								if(isset($result->result->session->gmStatus)) {

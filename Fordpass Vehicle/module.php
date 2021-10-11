@@ -244,14 +244,14 @@
 									}
 
 									if(isset($vehicle->doorStatus)) {
+										$rightRearDoor=false;
+										$leftRearDoor=false;
+										$driverDoor=false;
+										$passengerDoor=false;
+										$hoodDoor=false;
+										$tailgateDoor=false;
 										foreach ($vehicle->doorStatus as $doorId => $door) {
-											if(iiset($door-value) && is_string($door->value)) {
-												$rightRearDoor=false;
-												$leftRearDoor=false;
-												$driverDoor=false;
-												$passengerDoor=false;
-												$hoodDoor=false;
-												$tailgateDoor=false;
+											if(isset($door->value) && is_string($door->value)) {
 												$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Analyzing %s', $doorId), 0);
 												switch($doorId) {
 													case 'rightRearDoor':

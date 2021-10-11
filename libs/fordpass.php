@@ -304,10 +304,7 @@ class FordPass {
 
             $Url .= '/'. $Result->result->commandId;                    
             
-            $break = false;
-            $count = 0;
-            while(!$break) {
-                $count++;
+            for($count=1;$count<50;$count++) {
                 IPS_LogMessage('Lock', sprintf('Loop Count: %s', (string)$count));
                 if($count>100) {
                     return false;

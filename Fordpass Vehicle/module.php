@@ -27,9 +27,6 @@
 					[false, 'Stopped', '', -1]
 				]);
 
-				ignitionStatus
-				
-					
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
 				$this->RegisterPropertyInteger('ForceInterval', 15);
 				$this->RegisterPropertyInteger('ForceIntervalDisconnected', 15);

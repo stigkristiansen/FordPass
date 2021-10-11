@@ -21,10 +21,13 @@
 					[true, 'OK', 'Ok', -1],
 					[false, 'Check condition', 'Warning', -1]
 				]);
-
 				$this->RegisterProfileBooleanEx('FPV.IgnitionStatus', 'Key', '', '', [
 					[true, 'Running', '', -1],
 					[false, 'Stopped', '', -1]
+				]);
+				$this->RegisterProfileBooleanEx('FPV.DoorStatus', 'Information', '', '', [
+					[true, 'Closed', '', -1],
+					[false, 'Open', '', -1]
 				]);
 
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
@@ -45,6 +48,7 @@
 				$this->RegisterVariableFloat('BatteryFillLevel', 'Battery Fill Level', 'FPV.BatteryFillLevel', 5);
 				$this->RegisterVariableBoolean('TirePressure', 'Tire Pressure', 'FPV.Status', 6);
 				$this->RegisterVariableBoolean('IgnitionStatus', 'Ignition', 'FPV.IgnitionStatus', 7);
+				$this->RegisterVariableBoolean('DoorStatus', 'Door Status', 'FPV.DoorStatus', 8);
 									
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
 				$this->RegisterTimer('FordPassForce' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Force", 0);'); 
@@ -60,6 +64,7 @@
 					$this->DeleteProfile('FPV.BatteryFillLevel');
 					$this->DeleteProfile('FPV.Status');
 					$this->DeleteProfile('FPV.IgnitionStatus');
+					$this->DeleteProfile('FPV.DoorStatus');
 				}
 	
 				//Never delete this line!
@@ -236,6 +241,43 @@
 											$this->SetValueEx('IgnitionStatus', strtolower($value)=='off'?false:true);
 										}
 									}
+
+									if(isset($vehicle->doorStatus)) {
+										foreach ($vehicle->doorStatus as $doorId => $door) {
+											if(iiset($door-value) && is_string($door->value)) {
+												$rightRearDoor=false;
+												$leftRearDoor=false;
+												$driverDoor=false;
+												$passengerDoor=false;
+												$hoodDoor=false;
+												$tailgateDoor=false;
+												switch($doorId) {
+													case 'rightRearDoor':
+														$rightRearDoor = strtolower($door->value)=='closed'?true:false;
+														break;
+													case 'leftRearDoor':
+														$leftRearDoor = strtolower($door->value)=='closed'?true:false;
+														break;
+													case 'driverDoor':
+														$driverDoor = strtolower($door->value)=='closed'?true:false;
+														break;
+													case 'passengerDoor':
+														$passengerDoor = strtolower($door->value)=='closed'?true:false;
+														break;
+													case 'hoodDoor':
+														$hoodDoor = strtolower($door->value)=='closed'?true:false;
+														break;
+													case 'tailgateDoor':
+														$tailgateDoor = strtolower($door->value)=='closed'?true:false;
+														break;
+												}
+												$value = $rightRearDoor && $leftRearDoor && $driverDoor && $passengerDoor && $hoodDoor && $tailgateDoor;
+												$this->SetValueEx('DoorStatus', $value);
+												}
+											}
+										}
+									}
+
 								}
 								break;
 							case 'guardstatus':

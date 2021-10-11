@@ -218,12 +218,7 @@
 										}
 									}
 
-									if(isset($vehicle->tirePressure->value)) {
-										$value = $vehicle->tirePressure->value;
-										if(is_string($value)) {
-											$this->SetValueEx('TirePressure', strtolower($value)=='status_good'?true:false);
-										}
-									}
+
 									break;
 							case 'guardstatus':
 								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);

@@ -29,6 +29,10 @@
 					[true, 'Closed', '', -1],
 					[false, 'Open', '', -1]
 				]);
+				$this->RegisterProfileBooleanEx('FPV.WindowStatus', 'Information', '', '', [
+					[true, 'Closed', '', -1],
+					[false, 'Open', '', -1]
+				]);
 
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
 				$this->RegisterPropertyInteger('ForceInterval', 15);
@@ -48,7 +52,8 @@
 				$this->RegisterVariableFloat('BatteryFillLevel', 'Battery Fill Level', 'FPV.BatteryFillLevel', 5);
 				$this->RegisterVariableBoolean('TirePressure', 'Tire Pressure', 'FPV.Status', 6);
 				$this->RegisterVariableBoolean('IgnitionStatus', 'Ignition', 'FPV.IgnitionStatus', 7);
-				$this->RegisterVariableBoolean('DoorStatus', 'Door Status', 'FPV.DoorStatus', 8);
+				$this->RegisterVariableBoolean('DoorStatus', 'Doors Status', 'FPV.DoorStatus', 8);
+				$this->RegisterVariableBoolean('WindowStatus', 'Windows Status', 'FPV.WindowStatus', 8);
 									
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
 				$this->RegisterTimer('FordPassForce' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Force", 0);'); 
@@ -65,6 +70,7 @@
 					$this->DeleteProfile('FPV.Status');
 					$this->DeleteProfile('FPV.IgnitionStatus');
 					$this->DeleteProfile('FPV.DoorStatus');
+					$this->DeleteProfile('FPV.WindowStatus');
 				}
 	
 				//Never delete this line!
@@ -278,6 +284,35 @@
 										}
 										$value = $rightRearDoor && $leftRearDoor && $driverDoor && $passengerDoor && $hoodDoor && $tailgateDoor;
 										$this->SetValueEx('DoorStatus', $value);
+									}
+
+									if(isset($vehicle->windowPosition)) {
+										$rearPassWindowPos=false;
+										$rearDriverWindowPos=false;
+										$driverWindowPosition=false;
+										$passWindowPosition=false;
+										
+										foreach ($vehicle->windowPosition as $windowId => $window) {
+											if(isset($window->value) && is_string($window->value)) {
+												//$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Analyzing %s', $windowId), 0);
+												switch($doorId) {
+													case 'rearPassWindowPos':
+														$rearPassWindowPos = strtolower($window->value)=='fully closed position'?true:false;
+														break;
+													case 'rearDriverWindowPos':
+														$rearDriverWindowPos = strtolower($window->value)=='closed'?true:false;
+														break;
+													case 'driverWindowPosition':
+														$driverWindowPosition = strtolower($window->value)=='closed'?true:false;
+														break;
+													case 'passWindowPosition':
+														$passWindowPosition = strtolower($window->value)=='closed'?true:false;
+														break;
+												}
+											}
+										}
+										$value = $rearPassWindowPos && $rearDriverWindowPos && $driverWindowPosition && $passWindowPosition;
+										$this->SetValueEx('WindowStatus', $value);
 									}
 								}
 								break;

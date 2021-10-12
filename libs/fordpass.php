@@ -86,14 +86,10 @@ class FordPass {
             $now = new DateTime('now');
             
             $headers = array_merge(self::DEFAULT_HEADERS, self::AUTH_HEADERS);
-            //$result = $this->request('post', $url, $headers, $this->CreateFormData($body));
             $result = $this->request('post', $url, $headers, http_build_query($body));
-            
-            
-            //var_dump($result);
                         
             if($result->httpcode==200) {
-                $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);//, array('Application-Id:1E8C7794-FF5F-49BC-9596-A1E0C86C5B19')); //Application-Id is region code
+                $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);
                 $body = array("code" => $result->result->access_token);
                 $url = self::GUARD_ENDPOINT . '/oauth2/v1/token';
                 
@@ -325,20 +321,6 @@ class FordPass {
 
     }
        
-    private function CreateFormData(array $Data) : string {
-        $size = count($Data);
-        $result = '';
-        $i = 1;
-        foreach($Data as $id => $value) {
-            $result.=$id . '=' . urlencode($value);
-            $result.=$i<$size?'&':'';
-            $i++;
-        }
-
-        return $result;
-
-    }
-
     private function request($Type, $Url, $Headers, $Data=null) {
 		$ch = curl_init();
 		

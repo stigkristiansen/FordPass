@@ -287,31 +287,31 @@
 									}
 
 									if(isset($vehicle->windowPosition)) {
-										$rearPassWindowPos=false;
-										$rearDriverWindowPos=false;
 										$driverWindowPosition=false;
 										$passWindowPosition=false;
+										$rearDriverWindowPos=false;
+										$rearPassWindowPos=false;
 										
 										foreach ($vehicle->windowPosition as $windowId => $window) {
 											if(isset($window->value) && is_string($window->value)) {
 												//$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Analyzing %s', $windowId), 0);
 												switch($doorId) {
-													case 'rearPassWindowPos':
-														$rearPassWindowPos = strtolower($window->value)=='fully closed position'?true:false;
-														break;
-													case 'rearDriverWindowPos':
-														$rearDriverWindowPos = strtolower($window->value)=='closed'?true:false;
-														break;
 													case 'driverWindowPosition':
-														$driverWindowPosition = strtolower($window->value)=='closed'?true:false;
+														$driverWindowPosition = strtolower($window->value)=='fully closed position'?true:false;
 														break;
 													case 'passWindowPosition':
-														$passWindowPosition = strtolower($window->value)=='closed'?true:false;
+														$passWindowPosition = strtolower($window->value)=='fully closed position'?true:false;
+														break;
+													case 'rearDriverWindowPos':
+														$rearDriverWindowPos = strtolower($window->value)=='fully closed position'?true:false;
+														break;
+													case 'rearPassWindowPos':
+														$rearPassWindowPos = strtolower($window->value)=='fully closed position'?true:false;
 														break;
 												}
 											}
 										}
-										$value = $rearPassWindowPos && $rearDriverWindowPos && $driverWindowPosition && $passWindowPosition;
+										$value = $driverWindowPosition && $passWindowPosition && $rearDriverWindowPos && $rearPassWindowPos;
 										$this->SetValueEx('WindowStatus', $value);
 									}
 								}

@@ -293,9 +293,10 @@
 										$rearPassWindowPos=false;
 										
 										foreach ($vehicle->windowPosition as $windowId => $window) {
+											$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Analyzing %s', $windowId), 0);
 											if(isset($window->value) && is_string($window->value)) {
-												//$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Analyzing %s', $windowId), 0);
-												switch($doorId) {
+												$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Value is %s', $window->value), 0);
+												switch($windowId) {
 													case 'driverWindowPosition':
 														$driverWindowPosition = strtolower($window->value)=='fully closed position'?true:false;
 														break;

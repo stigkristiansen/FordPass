@@ -36,7 +36,6 @@ class FordPass {
     public function __construct(string $Region, String $Username='', string $Password='', string $AccessToken='', string $RefreshToken='', DateTime $Expires = null) {
         $this->username = $Username;
         $this->password = $Password;
-        //$this->VIN = $VIN;
         $this->Region = $Region;
         $this->accessToken =$AccessToken;
         $this->refreshToken = $RefreshToken;
@@ -87,7 +86,9 @@ class FordPass {
             $now = new DateTime('now');
             
             $headers = array_merge(self::DEFAULT_HEADERS, self::AUTH_HEADERS);
-            $result = $this->request('post', $url, $headers, $this->CreateFormData($body));
+            //$result = $this->request('post', $url, $headers, $this->CreateFormData($body));
+            $result = $this->request('post', $url, $headers, http_build_query($body));
+            
             
             //var_dump($result);
                         
@@ -165,7 +166,7 @@ class FordPass {
         $this->Connect();
         
         $params = array("lrdt" => "01-01-1970 00:00:00");
-        $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);//, array('Application-Id:1E8C7794-FF5F-49BC-9596-A1E0C86C5B19')); //Application-Id is region code
+        $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);
         $url = self::BASE_ENDPOINT . '/vehicles/v4/' . $VIN . '/status?' . http_build_query($params);
         
         try {
@@ -182,7 +183,7 @@ class FordPass {
     public function Lock(string $VIN, bool $State) : bool {
         $this->Connect();
         
-        $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);//, array('Application-Id:1E8C7794-FF5F-49BC-9596-A1E0C86C5B19'));
+        $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);
         $url = self::BASE_ENDPOINT . '/vehicles/v2/' . $VIN . '/doors/lock';
         
         try {
@@ -257,7 +258,7 @@ class FordPass {
         $this->Connect();
         
         $params = array("lrdt" => "01-01-1970 00:00:00");
-        $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);//, array('Application-Id:1E8C7794-FF5F-49BC-9596-A1E0C86C5B19')); //Application-Id is region code
+        $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);
         $url = self::GUARD_ENDPOINT . '/guardmode/v1/' . $VIN . '/session?' . http_build_query($params);
         
         try {
@@ -305,9 +306,8 @@ class FordPass {
             $Url .= '/'. $Result->result->commandId;                    
             
             for($count=1;$count<50;$count++) {
-                IPS_LogMessage('Lock', sprintf('Loop Count: %s', (string)$count));
                 $result = $this->request('get', $Url, $Headers);
-                IPS_LogMessage('Lock', json_encode($result));
+                
                 if(!isset($result->result->status)) {
                     throw new Exception(sprintf('%s failed. Invalid response. Missing value "status"', $Url));
                 }
@@ -344,7 +344,7 @@ class FordPass {
 		
 		switch(strtolower($Type)) {
 			case 'put':
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
 				break;
 			case 'post':
 				curl_setopt($ch, CURLOPT_POST, true );
@@ -353,7 +353,7 @@ class FordPass {
                 // Default for cURL
 		    	break;
             case 'delete':
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
                 break;
 		}
 
@@ -381,8 +381,6 @@ class FordPass {
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
 	        		
 		$result = curl_exec($ch);
-
-        //var_dump($result);
 
         if($result===false) {
             $response = array('error' => true);

@@ -84,7 +84,7 @@
 				$this->SetReceiveDataFilter('.*"ChildId":"' . (string)$this->InstanceID .'".*');
 	
 				if (IPS_GetKernelRunlevel() == KR_READY) {
-					$this->InitTimer();
+					$this->InitTimers();
 				}
 			}
 	
@@ -92,7 +92,7 @@
 				parent::MessageSink($TimeStamp, $SenderID, $Message, $Data);
 	
 				if ($Message == IPS_KERNELMESSAGE && $Data[0] == KR_READY) {
-					$this->InitTimer();
+					$this->InitTimers();
 				}
 			}
 	
@@ -111,7 +111,6 @@
 					switch (strtolower($Ident)) {
 						case 'refresh':
 							$request = $this->Refresh($VIN);
-							//$this->InitTimer(); // Reset timer back to configured interval
 							break;
 						case 'force':
 							$request[] = ['Function'=>'RequestUpdate','VIN'=>$VIN, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
@@ -225,7 +224,6 @@
 									if(isset($vehicle->plugStatus->value)) {
 										$value = $vehicle->plugStatus->value;
 										if(is_numeric($value)) {
-											//$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('plugStatus is %s ', (string)$value), 0);
 											if($value==1) {
 												$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, $this->ReadPropertyInteger('ForceInterval')*1000); 
 											} else {
@@ -258,7 +256,6 @@
 										$tailgateDoor=false;
 										foreach ($vehicle->doorStatus as $doorId => $door) {
 											if(isset($door->value) && is_string($door->value)) {
-												//$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Analyzing %s', $doorId), 0);
 												switch($doorId) {
 													case 'rightRearDoor':
 														$rightRearDoor = strtolower($door->value)=='closed'?true:false;
@@ -372,7 +369,7 @@
 				}
 			}
 	
-			private function InitTimer(){
+			private function InitTimers(){
 				$this->SetTimerInterval('FordPassRefresh' . (string)$this->InstanceID, $this->ReadPropertyInteger('UpdateInterval')*1000); 
 				$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, $this->ReadPropertyInteger('ForceInterval')*1000); 
 			}

@@ -409,9 +409,14 @@
 	
 			private function SetValueEx(string $Ident, $Value) {
 				$oldValue = $this->GetValue($Ident);
+				if(is_bool($Value)) {
+					$msgValue = $value?'true':'false';
+				} else {
+					$msgValue = $Value;
+				}
 				//if($oldValue!=$Value) {
 					$this->SetValue($Ident, $Value);
-					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Updated variable with Ident "%s". %s value is  "%s"', $Ident, $oldValue==$Value?'Refreshed':'New', (string)$Value), 0);
+					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Updated variable with Ident "%s". %s value is  "%s"', $Ident, $oldValue==$Value?'Refreshed':'New', (string)$msgValue), 0);
 				//}
 			}
 		}

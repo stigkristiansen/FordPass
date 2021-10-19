@@ -395,10 +395,10 @@
 			}
 	
 			private function SetValueEx(string $Ident, $Value) {
-				$oldValue = $this->GetValue($Ident);
-				if($oldValue!=$Value) {
+				//$oldValue = $this->GetValue($Ident);
+				//if($oldValue!=$Value) {
 					$this->SetValue($Ident, $Value);
 					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Modifed variable with Ident "%s". New value is  "%s"', $Ident, (string)$Value), 0);
-				}
+				//}
 			}
 		}

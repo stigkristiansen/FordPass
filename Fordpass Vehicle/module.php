@@ -52,8 +52,8 @@
 
 				$this->RegisterVariableBoolean('Guard', 'SecuriAlert', 'FPV.SecuriAlert', 3);
 				$this->EnableAction('Guard');
-				$this->RegisterVariableFloat('Alarm', 'Alarm', 'FPV.AlarmStatus', 4);
-
+				
+				$this->RegisterVariableBoolean('Alarm', 'Alarm', 'FPV.AlarmStatus', 4);
 				$this->RegisterVariableFloat('Odometer', 'Total distance', 'FPV.Odometer', 5);
 				$this->RegisterVariableFloat('BatteryFillLevel', 'Battery Fill Level', 'FPV.BatteryFillLevel', 6);
 				$this->RegisterVariableFloat('12VBatterySOC', '12V Battery SOC', 'FPV.12VBatterySOC', 7);

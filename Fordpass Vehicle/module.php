@@ -410,7 +410,7 @@
 			private function SetValueEx(string $Ident, $Value) {
 				$oldValue = $this->GetValue($Ident);
 				if(is_bool($Value)) {
-					$msgValue = $value?'true':'false';
+					$msgValue = $Value?'true':'false';
 				} else {
 					$msgValue = $Value;
 				}

@@ -411,7 +411,7 @@
 				//$oldValue = $this->GetValue($Ident);
 				//if($oldValue!=$Value) {
 					$this->SetValue($Ident, $Value);
-					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Modifed variable with Ident "%s". New value is  "%s"', $Ident, (string)$Value), 0);
+					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Refreshed variable with Ident "%s". Refreshed value is  "%s"', $Ident, (string)$Value), 0);
 				//}
 			}
 		}

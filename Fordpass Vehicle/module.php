@@ -34,6 +34,10 @@
 					[true, 'Closed', '', -1],
 					[false, 'Open', '', -1]
 				]);
+				$this->RegisterProfileBooleanEx('FPV.AlarmStatus', 'Alert', '', '', [
+					[true, 'Activated', '', -1],
+					[false, 'Deactivated', '', -1]
+				]);
 
 				$this->RegisterPropertyInteger('UpdateInterval', 15);
 				$this->RegisterPropertyInteger('ForceInterval', 15);
@@ -48,14 +52,15 @@
 
 				$this->RegisterVariableBoolean('Guard', 'SecuriAlert', 'FPV.SecuriAlert', 3);
 				$this->EnableAction('Guard');
+				$this->RegisterVariableFloat('Alarm', 'Alarm', 'FPV.AlarmStatus', 4);
 
-				$this->RegisterVariableFloat('Odometer', 'Total distance', 'FPV.Odometer', 4);
-				$this->RegisterVariableFloat('BatteryFillLevel', 'Battery Fill Level', 'FPV.BatteryFillLevel', 5);
-				$this->RegisterVariableFloat('12VBatterySOC', '12V Battery SOC', 'FPV.12VBatterySOC', 6);
-				$this->RegisterVariableBoolean('TirePressure', 'Tire Pressure', 'FPV.Status', 7);
-				$this->RegisterVariableBoolean('IgnitionStatus', 'Ignition', 'FPV.IgnitionStatus', 8);
-				$this->RegisterVariableBoolean('DoorStatus', 'Doors Status', 'FPV.DoorStatus', 9);
-				$this->RegisterVariableBoolean('WindowStatus', 'Windows Status', 'FPV.WindowStatus', 10);
+				$this->RegisterVariableFloat('Odometer', 'Total distance', 'FPV.Odometer', 5);
+				$this->RegisterVariableFloat('BatteryFillLevel', 'Battery Fill Level', 'FPV.BatteryFillLevel', 6);
+				$this->RegisterVariableFloat('12VBatterySOC', '12V Battery SOC', 'FPV.12VBatterySOC', 7);
+				$this->RegisterVariableBoolean('TirePressure', 'Tire Pressure', 'FPV.Status', 8);
+				$this->RegisterVariableBoolean('IgnitionStatus', 'Ignition', 'FPV.IgnitionStatus', 9);
+				$this->RegisterVariableBoolean('DoorStatus', 'Doors Status', 'FPV.DoorStatus', 10);
+				$this->RegisterVariableBoolean('WindowStatus', 'Windows Status', 'FPV.WindowStatus', 11);
 									
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
 				$this->RegisterTimer('FordPassForce' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Force", 0);'); 
@@ -74,6 +79,7 @@
 					$this->DeleteProfile('FPV.DoorStatus');
 					$this->DeleteProfile('FPV.WindowStatus');
 					$this->DeleteProfile('FPV.12VBatterySOC');
+					$this->DeleteProfile('FPV.AlarmStatus');
 				}
 	
 				//Never delete this line!
@@ -240,6 +246,13 @@
 												// Throttle RequestUpdate
 												$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, $this->ReadPropertyInteger('ForceIntervalDisconnected')*60*1000); 
 											}
+										}
+									}
+
+									if(isset($vehicle->alarm->value)) {
+										$value = $vehicle->alarm->value;
+										if(is_string($value)) {
+											$this->SetValueEx('Alarm', strtolower($value)=='set'?true:false);
 										}
 									}
 

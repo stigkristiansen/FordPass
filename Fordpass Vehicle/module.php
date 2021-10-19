@@ -17,6 +17,7 @@
 				$this->RegisterProfileBoolean('FPV.SecuriAlert', 'Alert', '', '');
 				$this->RegisterProfileFloat('FPV.Odometer', 'Information', '', ' km');
 				$this->RegisterProfileFloat('FPV.BatteryFillLevel', 'Electricity', '', ' %');
+				$this->RegisterProfileFloat('FPV.12VBatterySOC', 'Battery', '', ' V');
 				$this->RegisterProfileBooleanEx('FPV.Status', 'Information', '', '', [
 					[true, 'OK', 'Ok', -1],
 					[false, 'Check condition', 'Warning', -1]
@@ -50,10 +51,11 @@
 
 				$this->RegisterVariableFloat('Odometer', 'Total distance', 'FPV.Odometer', 4);
 				$this->RegisterVariableFloat('BatteryFillLevel', 'Battery Fill Level', 'FPV.BatteryFillLevel', 5);
-				$this->RegisterVariableBoolean('TirePressure', 'Tire Pressure', 'FPV.Status', 6);
-				$this->RegisterVariableBoolean('IgnitionStatus', 'Ignition', 'FPV.IgnitionStatus', 7);
-				$this->RegisterVariableBoolean('DoorStatus', 'Doors Status', 'FPV.DoorStatus', 8);
-				$this->RegisterVariableBoolean('WindowStatus', 'Windows Status', 'FPV.WindowStatus', 8);
+				$this->RegisterVariableFloat('12VBatterySOC', '12V Battery SOC', 'FPV.12VBatterySOC', 6);
+				$this->RegisterVariableBoolean('TirePressure', 'Tire Pressure', 'FPV.Status', 7);
+				$this->RegisterVariableBoolean('IgnitionStatus', 'Ignition', 'FPV.IgnitionStatus', 8);
+				$this->RegisterVariableBoolean('DoorStatus', 'Doors Status', 'FPV.DoorStatus', 9);
+				$this->RegisterVariableBoolean('WindowStatus', 'Windows Status', 'FPV.WindowStatus', 10);
 									
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
 				$this->RegisterTimer('FordPassForce' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Force", 0);'); 
@@ -71,6 +73,7 @@
 					$this->DeleteProfile('FPV.IgnitionStatus');
 					$this->DeleteProfile('FPV.DoorStatus');
 					$this->DeleteProfile('FPV.WindowStatus');
+					$this->DeleteProfile('FPV.12VBatterySOC');
 				}
 	
 				//Never delete this line!
@@ -218,6 +221,13 @@
 										$value = $vehicle->batteryFillLevel->value;
 										if(is_numeric($value)) {
 											$this->SetValueEx('BatteryFillLevel', (float)$value);
+										}
+									}
+
+									if(isset($vehicle->battery->batteryStatusActual->value)) {
+										$value = $vehicle->battery->batteryStatusActual->value;
+										if(is_numeric($value)) {
+											$this->SetValueEx('12VBatterySOC', (float)$value);
 										}
 									}
 

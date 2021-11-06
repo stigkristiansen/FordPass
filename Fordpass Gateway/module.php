@@ -258,7 +258,7 @@ include __DIR__ . "/../libs/fordpass.php";
 			
 			try {
 				if($fordpass==null) {
-					throw new Exception('Unable to refresh the Easee class');
+					throw new Exception('Unable to refresh the FordPass class');
 				}
 	
 				if($this->ReadPropertyBoolean('SkipSSLCheck')) {

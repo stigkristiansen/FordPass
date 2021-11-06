@@ -223,6 +223,13 @@
 										}
 									}
 
+									if(isset($vehicle->remoteStartStatus->value)) {
+										$value = $vehicle->remoteStartStatus->value;
+										if(is_numeric($value)) {
+											$this->SetValueEx('Start', (bool)$value);
+										}
+									}
+
 									if(isset($vehicle->batteryFillLevel->value)) {
 										$value = $vehicle->batteryFillLevel->value;
 										if(is_numeric($value)) {

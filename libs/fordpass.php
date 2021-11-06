@@ -370,15 +370,16 @@ class FordPass {
             $response['httpcode'] = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
             
             return (object) $response;
-        } else
-            $response = array('error' => false);
-            $response['httpcode'] = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-            $response['result'] = (object) null ;
-            
-            $return = (object) $response;
-            $return->result = $this->isJson($result)?json_decode($result):$result; 
+        } 
 
-            return  $return;
+        $response = array('error' => false);
+        $response['httpcode'] = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+        $response['result'] = (object) null ;
+        
+        $return = (object) $response;
+        $return->result = $this->isJson($result)?json_decode($result):$result; 
+
+        return  $return;
 	}
 
     private function isJson(string $Data) {

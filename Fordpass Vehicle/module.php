@@ -7,6 +7,7 @@
 		class FordpassVehicle extends IPSModule {
 			use Profiles;
 			use Utility;
+			use Lock;
 	
 			public function Create(){
 				//Never delete this line!
@@ -412,6 +413,34 @@
 				}
 
 				return [];
+			}
+
+			private function InProgress(string $Ident) {
+				$data = $this->GetBuffer('InProgress');
+				if(strlen($data)>0) {
+					$values = json_decode($data);
+					foreach($values as $key => $value) {
+						if($key==$Ident) {
+							return $value;
+						}
+					}
+
+					return false;
+				} else
+					return false;
+			}
+
+			private function UpdateInProgress(string $Ident, bool $State) {
+				$data = $this->GetBuffer('InProgress');
+				if(strlen($data)>0) {
+					$values = json_decode($data);
+				} else {
+					$values = [];
+				}
+
+				$values[$Ident] = $State;
+
+				$this->SetBuffer('InProgress', json_encode($values));
 			}
 	
 			private function SetValueEx(string $Ident, $Value) {

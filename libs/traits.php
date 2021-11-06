@@ -1,5 +1,38 @@
 <?php
 
+trait Lock {
+    private function Lock(string $Id) : bool {
+        for ($i=0;$i<500;$i++){
+            if (IPS_SemaphoreEnter("FordPass" . (string)$this->InstanceID . $Id, 1)){
+                if($i==0) {
+                    $msg = sprintf('Created the Lock with id "%s"', $Id);
+                } else {
+                    $msg = sprintf('Released and recreated the Lock with id "%s"', $Id);
+                }
+                $this->SendDebug(IPS_GetName($this->InstanceID), $msg, 0);
+                return true;
+            } else {
+                if($i==0) {
+                    $this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Waiting for the Lock with id "%s" to be released', $Id), 0);
+                }
+                IPS_Sleep(mt_rand(1, 5));
+            }
+        }
+        
+        $this->LogMessage(sprintf('Timedout waiting for the Lock with id "%s" to be released', $Id), KL_ERROR);
+        $this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Timedout waiting for the Lock with id "%s" to be released', $Id), 0);
+        
+        return false;
+    }
+
+    private function Unlock(string $Id)
+    {
+        IPS_SemaphoreLeave("FordPass" . (string)$this->InstanceID . $Id);
+
+        $this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Removed the Lock with id "%s"', $Id), 0);
+    }
+}
+
 trait Utility {
     protected function GUID() {
         return sprintf('{%04X%04X-%04X-%04X-%04X-%04X%04X%04X}', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));

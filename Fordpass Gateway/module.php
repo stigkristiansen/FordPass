@@ -2,8 +2,11 @@
 declare(strict_types=1);
 
 include __DIR__ . "/../libs/fordpass.php";
+include __DIR__ . "/../libs/traits.php";
 
 	class FordpassGateway extends IPSModule {
+		use Lock;
+		
 		public function Create()
 		{
 			//Never delete this line!
@@ -317,34 +320,5 @@ include __DIR__ . "/../libs/fordpass.php";
 			}
 		}
 	
-		private function Lock(string $Id) : bool {
-			for ($i=0;$i<500;$i++){
-				if (IPS_SemaphoreEnter("FordPass" . (string)$this->InstanceID . $Id, 1)){
-					if($i==0) {
-						$msg = sprintf('Created the Lock with id "%s"', $Id);
-					} else {
-						$msg = sprintf('Released and recreated the Lock with id "%s"', $Id);
-					}
-					$this->SendDebug(IPS_GetName($this->InstanceID), $msg, 0);
-					return true;
-				} else {
-					if($i==0) {
-						$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Waiting for the Lock with id "%s" to be released', $Id), 0);
-					}
-					IPS_Sleep(mt_rand(1, 5));
-				}
-			}
-			
-			$this->LogMessage(sprintf('Timedout waiting for the Lock with id "%s" to be released', $Id), KL_ERROR);
-			$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Timedout waiting for the Lock with id "%s" to be released', $Id), 0);
-			
-			return false;
-		}
 	
-		private function Unlock(string $Id)
-		{
-			IPS_SemaphoreLeave("FordPass" . (string)$this->InstanceID . $Id);
-	
-			$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Removed the Lock with id "%s"', $Id), 0);
-		}
 	}

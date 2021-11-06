@@ -126,10 +126,12 @@
 							$request[] = ['Function'=>'RequestUpdate','VIN'=>$VIN, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 							break;		
 						case 'lock':
+							$this->UpdateInProgress('Lock', true);
 							$this->SetValue($Ident, $Value);
 							$request[] = ['Function'=>'Lock', 'VIN'=>$VIN, 'State'=>$Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 							break;
 						case 'start':
+							$this->UpdateInProgress('Start', true);
 							$this->SetValue($Ident, $Value);
 							$request[] = ['Function'=>'Start', 'VIN'=>$VIN, 'State'=>$Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 							break;
@@ -210,11 +212,15 @@
 								if(isset($result->result->vehiclestatus)) {
 									$vehicle = $result->result->vehiclestatus;
 
-									if(isset($vehicle->lockStatus->value)) {
-										$value = $vehicle->lockStatus->value;
-										if(is_string($value)) {
-											$this->SetValueEx('Lock', strtolower($value)=='locked'?true:false);
+									if(!$this->InProgress('Lock')) {
+										if(isset($vehicle->lockStatus->value)) {
+											$value = $vehicle->lockStatus->value;
+											if(is_string($value)) {
+												$this->SetValueEx('Lock', strtolower($value)=='locked'?true:false);
+											}
 										}
+									} else {
+										$this->SendDebug(IPS_GetName($this->InstanceID), 'Lock request is in progress. Skipping Lock Update', 0);
 									}
 
 									if(isset($vehicle->odometer->value)) {
@@ -224,11 +230,15 @@
 										}
 									}
 
-									if(isset($vehicle->remoteStartStatus->value)) {
-										$value = $vehicle->remoteStartStatus->value;
-										if(is_numeric($value)) {
-											$this->SetValueEx('Start', (bool)$value);
+									if(!$this->InProgress('Start')) {
+										if(isset($vehicle->remoteStartStatus->value)) {
+											$value = $vehicle->remoteStartStatus->value;
+											if(is_numeric($value)) {
+												$this->SetValueEx('Start', (bool)$value);
+											}
 										}
+									} else {
+										$this->SendDebug(IPS_GetName($this->InstanceID), 'Start request is in progress. Skipping Start Update', 0);
 									}
 
 									if(isset($vehicle->batteryFillLevel->value)) {
@@ -354,6 +364,7 @@
 								}
 								break;
 							case 'start':
+								$this->UpdateInProgress('Start', false);
 								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {
 									if($result) {
@@ -364,6 +375,7 @@
 								}
 								break;
 							case 'lock':
+								$this->UpdateInProgress('Lock', false);
 								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {
 									if($result) {
@@ -416,31 +428,36 @@
 			}
 
 			private function InProgress(string $Ident) {
-				$data = $this->GetBuffer('InProgress');
-				if(strlen($data)>0) {
-					$values = json_decode($data);
-					foreach($values as $key => $value) {
-						if($key==$Ident) {
-							return $value;
+				if($this->Lock('InProgress')) {
+					$data = $this->GetBuffer('InProgress');
+					$this->Unlock('InProgress');
+					if(strlen($data)>0) {
+						$values = json_decode($data);
+						foreach($values as $key => $value) {
+							if($key==$Ident) {
+								return $value;
+							}
 						}
-					}
-
-					return false;
-				} else
-					return false;
+						return false;
+					} else
+						return false;
+				}
 			}
 
 			private function UpdateInProgress(string $Ident, bool $State) {
-				$data = $this->GetBuffer('InProgress');
-				if(strlen($data)>0) {
-					$values = json_decode($data);
-				} else {
-					$values = [];
+				if($this->Lock('InProgress')) {
+					$data = $this->GetBuffer('InProgress');
+					if(strlen($data)>0) {
+						$values = json_decode($data);
+					} else {
+						$values = [];
+					}
+
+					$values[$Ident] = $State;
+
+					$this->SetBuffer('InProgress', json_encode($values));
+					$this->Unlock('InProgress');
 				}
-
-				$values[$Ident] = $State;
-
-				$this->SetBuffer('InProgress', json_encode($values));
 			}
 	
 			private function SetValueEx(string $Ident, $Value) {

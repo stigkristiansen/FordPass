@@ -108,7 +108,7 @@
 	
 			public function RequestAction($Ident, $Value) {
 				try {
-					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('ReqestAction called for Ident "%s" with Value %s', $Ident, (string)$Value), 0);
+					$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('ReqestAction called for Ident "%s" with Value %s', $Ident, (string)$Value), 0);
 		
 					$VIN = $this->ReadPropertyString('VIN');
 
@@ -126,13 +126,13 @@
 							$request[] = ['Function'=>'RequestUpdate','VIN'=>$VIN, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 							break;		
 						case 'lock':
-							$this->SendDebug(IPS_GetName($this->InstanceID), 'Setting InProgress flag to "true" for function "Lock"', 0);
+							$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', 'Setting InProgress flag to "true" for function "Lock"', 0);
 							$this->UpdateInProgress('Lock', true);
 							$this->SetValue($Ident, $Value);
 							$request[] = ['Function'=>'Lock', 'VIN'=>$VIN, 'State'=>$Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 							break;
 						case 'start':
-							$this->SendDebug(IPS_GetName($this->InstanceID), 'Setting InProgress flag to "true" for function "Start"', 0);
+							$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', 'Setting InProgress flag to "true" for function "Start"', 0);
 							$this->UpdateInProgress('Start', true);
 							$this->SetValue($Ident, $Value);
 							$request[] = ['Function'=>'Start', 'VIN'=>$VIN, 'State'=>$Value, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
@@ -146,20 +146,20 @@
 					}
 	
 					if($request!=null) {
-						$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Sending a request with id %s to the gateway. Request is "%s"', $guid, json_encode($request)), 0);
+						$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Sending a request with id %s to the gateway. Request is "%s"', $guid, json_encode($request)), 0);
 						$this->SendDataToParent(json_encode(['DataID' => '{047CD9E9-0492-37DF-0955-3DF2F006F0A2}', 'Buffer' => $request]));
 					}
 	
 				} catch(Exception $e) {
 					$this->LogMessage(sprintf('RequestAction failed. The error was "%s"',  $e->getMessage()), KL_ERROR);
-					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('RequestAction failed. The error was "%s"', $e->getMessage()), 0);
+					$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('RequestAction failed. The error was "%s"', $e->getMessage()), 0);
 				}
 			}
 	
 			public function ReceiveData($JSONString) {
 				try {
 					$data = json_decode($JSONString);
-					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Received data from parent: %s', json_encode($data->Buffer)), 0);
+					$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Received data from parent: %s', json_encode($data->Buffer)), 0);
 				 
 					$msg = '';
 					if(!isset($data->Buffer->Function) ) {
@@ -207,10 +207,10 @@
 						$function = strtolower($data->Buffer->Function);
 						switch($function) {
 							case 'requestupdate':
-								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...Nothing to do', $data->Buffer->Function), 0);
+								$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Handling %s()...Nothing to do', $data->Buffer->Function), 0);
 								break;
 							case 'status':
-								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
+								$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								if(isset($result->result->vehiclestatus)) {
 									$vehicle = $result->result->vehiclestatus;
 
@@ -222,7 +222,7 @@
 											}
 										}
 									} else {
-										$this->SendDebug(IPS_GetName($this->InstanceID), 'Lock request is in progress. Skipping Lock Update', 0);
+										$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', 'Lock request is in progress. Skipping Lock Update', 0);
 									}
 
 									if(isset($vehicle->odometer->value)) {
@@ -240,7 +240,7 @@
 											}
 										}
 									} else {
-										$this->SendDebug(IPS_GetName($this->InstanceID), 'Start request is in progress. Skipping Start Update', 0);
+										$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', 'Start request is in progress. Skipping Start Update', 0);
 									}
 
 									if(isset($vehicle->batteryFillLevel->value)) {
@@ -356,7 +356,7 @@
 								}
 								break;
 							case 'guardstatus':
-								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
+								$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								if(isset($result->result->session->gmStatus)) {
 									$gmStatus = $result->result->session->gmStatus;
 									if(is_string($gmStatus)) {
@@ -366,8 +366,8 @@
 								}
 								break;
 							case 'start':
-								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
-								$this->SendDebug(IPS_GetName($this->InstanceID), 'Setting InProgress flag to "false" for function "Start"', 0);
+								$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Handling %s()...', $data->Buffer->Function), 0);
+								$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', 'Setting InProgress flag to "false" for function "Start"', 0);
 								$this->UpdateInProgress('Start', false);
 								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {
 									if($result) {
@@ -378,8 +378,8 @@
 								}
 								break;
 							case 'lock':
-								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
-								$this->SendDebug(IPS_GetName($this->InstanceID), 'Setting InProgress flag to "false" for function "Lock"', 0);
+								$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Handling %s()...', $data->Buffer->Function), 0);
+								$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', 'Setting InProgress flag to "false" for function "Lock"', 0);
 								$this->UpdateInProgress('Lock', false);
 								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {
 									if($result) {
@@ -390,7 +390,7 @@
 								}
 								break;
 							case 'guard':
-								$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Handling %s()...', $data->Buffer->Function), 0);
+								$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Handling %s()...', $data->Buffer->Function), 0);
 								if(is_bool($result) && isset($parameters[1]) && is_bool($parameters[1])) {
 									if($result) {
 										$this->SetValueEx('Guard', $parameters[1]);
@@ -403,14 +403,14 @@
 								throw new Exception(sprintf('Unknown function "%s()" receeived in repsponse with request id %s from gateway', $function, $requestId));
 						}
 						
-						$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Processed the result from %s() for request id %s: %s...', $data->Buffer->Function, $requestId,json_encode($result)), 0);
+						$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Processed the result from %s() for request id %s: %s...', $data->Buffer->Function, $requestId,json_encode($result)), 0);
 					} else {
 						throw new Exception(sprintf('The gateway returned an error on request id %s: %s', $requestId, $result));
 					}
 					
 				} catch(Exception $e) {
 					$this->LogMessage(sprintf('ReceiveData() failed. The error was "%s"',  $e->getMessage()), KL_ERROR);
-					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('ReceiveData() failed. The error was "%s"',  $e->getMessage()), 0);
+					$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('ReceiveData() failed. The error was "%s"',  $e->getMessage()), 0);
 				}
 			}
 	
@@ -435,7 +435,7 @@
 				if($this->Lock('InProgress')) {
 					$data = $this->GetBuffer('InProgress');
 					$this->Unlock('InProgress');
-					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('InProgress buffer is "%s"', $data), 0);
+					$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('InProgress buffer is "%s"', $data), 0);
 					if(strlen($data)>0) {
 						$values = json_decode($data, true);
 						foreach($values as $key => $value) {
@@ -443,9 +443,9 @@
 							if($key==$Ident) {
 								$return = $now-$value['Timestamp']<60?$value['State']:false;
 								if($return!=$value['State']) {
-									$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('InProgress state for "%s" has timed out. Returning "false"', $Ident), 0);
+									$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('InProgress state for "%s" has timed out. Returning "false"', $Ident), 0);
 								} else {
-									$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('InProgress state for "%s" is "%s', $Ident, $return?'true':'false'), 0);
+									$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('InProgress state for "%s" is "%s', $Ident, $return?'true':'false'), 0);
 								}
 								return $return;
 							}
@@ -460,7 +460,7 @@
 			private function UpdateInProgress(string $Ident, bool $State) {
 				if($this->Lock('InProgress')) {
 					$data = $this->GetBuffer('InProgress');
-					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('InProgress buffer is "%s"', $data), 0);
+					$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('InProgress buffer is "%s"', $data), 0);
 					if(strlen($data)>0) {
 						$values = json_decode($data, true);
 					} else {
@@ -471,7 +471,7 @@
 					$newValues = json_encode($values);
 					$this->SetBuffer('InProgress', $newValues);
 					$this->Unlock('InProgress');
-					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('InProgress buffer is updated to "%s"', $newValues), 0);
+					$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('InProgress buffer is updated to "%s"', $newValues), 0);
 				}
 			}
 	
@@ -484,7 +484,7 @@
 				}
 				//if($oldValue!=$Value) {
 					$this->SetValue($Ident, $Value);
-					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Updated variable with Ident "%s". %s value is  "%s"', $Ident, $oldValue==$Value?'Refreshed':'New', (string)$msgValue), 0);
+					$this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Updated variable with Ident "%s". %s value is  "%s"', $Ident, $oldValue==$Value?'Refreshed':'New', (string)$msgValue), 0);
 				//}
 			}
 		}

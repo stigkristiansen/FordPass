@@ -9,18 +9,18 @@ trait Lock {
                 } else {
                     $msg = sprintf('Released and recreated the Lock with id "%s"', $Id);
                 }
-                $this->SendDebug(IPS_GetName($this->InstanceID), $msg, 0);
+                $this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', $msg, 0);
                 return true;
             } else {
                 if($i==0) {
-                    $this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Waiting for the Lock with id "%s" to be released', $Id), 0);
+                    $this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Waiting for the Lock with id "%s" to be released', $Id), 0);
                 }
                 IPS_Sleep(mt_rand(1, 5));
             }
         }
         
         $this->LogMessage(sprintf('Timedout waiting for the Lock with id "%s" to be released', $Id), KL_ERROR);
-        $this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Timedout waiting for the Lock with id "%s" to be released', $Id), 0);
+        $this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Timedout waiting for the Lock with id "%s" to be released', $Id), 0);
         
         return false;
     }
@@ -29,7 +29,7 @@ trait Lock {
     {
         IPS_SemaphoreLeave("FordPass" . (string)$this->InstanceID . $Id);
 
-        $this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Removed the Lock with id "%s"', $Id), 0);
+        $this->SendDebug(IPS_GetName($this->InstanceID) . '(' . __FUNCTION__ . ')', sprintf('Removed the Lock with id "%s"', $Id), 0);
     }
 }
 

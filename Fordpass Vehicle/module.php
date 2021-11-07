@@ -437,7 +437,7 @@
 					$this->Unlock('InProgress');
 					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('InProgress buffer is "%s"', $data), 0);
 					if(strlen($data)>0) {
-						$values = json_decode($data);
+						$values = json_decode($data, true);
 						foreach($values as $key => $value) {
 							$now = microtime(true);
 							if($key==$Ident) {
@@ -462,7 +462,7 @@
 					$data = $this->GetBuffer('InProgress');
 					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('InProgress buffer is "%s"', $data), 0);
 					if(strlen($data)>0) {
-						$values = json_decode($data);
+						$values = json_decode($data, true);
 					} else {
 						$values = [];
 					}

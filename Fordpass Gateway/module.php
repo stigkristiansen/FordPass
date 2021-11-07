@@ -6,7 +6,7 @@ include __DIR__ . "/../libs/traits.php";
 
 	class FordpassGateway extends IPSModule {
 		use Lock;
-		
+
 		public function Create()
 		{
 			//Never delete this line!
@@ -47,7 +47,7 @@ include __DIR__ . "/../libs/traits.php";
 
 		public function RequestAction($Ident, $Value) {
 			try {
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('ReqestAction called for Ident "%s" with Value %s', $Ident, $Value), 0);
+				$this->SendDebug( __FUNCTION__ , sprintf('ReqestAction called for Ident "%s" with Value %s', $Ident, $Value), 0);
 	
 				switch (strtolower($Ident)) {
 					case 'async':
@@ -61,18 +61,18 @@ include __DIR__ . "/../libs/traits.php";
 				}
 			} catch(Exception $e) {
 				$this->LogMessage(sprintf('RequestAction failed. The error was "%s"',  $e->getMessage()), KL_ERROR);
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('RequestAction failed. The error was "%s"', $e->getMessage()), 0);
+				$this->SendDebug( __FUNCTION__ , sprintf('RequestAction failed. The error was "%s"', $e->getMessage()), 0);
 			}
 		}
 
 		public function ForwardData($JSONString) {
-			$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Received a request from a child. The request was "%s"', $JSONString), 0);
+			$this->SendDebug( __FUNCTION__ , sprintf('Received a request from a child. The request was "%s"', $JSONString), 0);
 	
 			$data = json_decode($JSONString);
 			$requests = json_encode($data->Buffer);
 			$script = "IPS_RequestAction(" . (string)$this->InstanceID . ", 'Async', '" . $requests . "');";
 	
-			$this->SendDebug(IPS_GetName($this->InstanceID), 'Executing the request(s) in a new thread...', 0);
+			$this->SendDebug( __FUNCTION__ , 'Executing the request(s) in a new thread...', 0);
 					
 			// Call RequestAction in another thread
 			IPS_RunScriptText($script);
@@ -142,7 +142,7 @@ include __DIR__ . "/../libs/traits.php";
 
 		private function ExecuteFordPassRequest(string $ChildId, string $RequestId, string $Function, array $Args=null) {
 		
-			$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Executing FordPass::%s() for component %s. Request id is %s...', $Function, isset($Args[0])?$Args[0]:'N/A', $RequestId), 0);
+			$this->SendDebug( __FUNCTION__ , sprintf('Executing FordPass::%s() for component %s. Request id is %s...', $Function, isset($Args[0])?$Args[0]:'N/A', $RequestId), 0);
 	
 			$fordpass = null;
 					
@@ -170,7 +170,7 @@ include __DIR__ . "/../libs/traits.php";
 					$fordpass->DisableSSLCheck();
 				}
 	
-				//$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Executing function "%s" ...', $Function), 0);
+				//$this->SendDebug( __FUNCTION__ , sprintf('Executing function "%s" ...', $Function), 0);
 
 				if($Args == null) {
 					$result = call_user_func(array($fordpass, $Function));
@@ -178,10 +178,10 @@ include __DIR__ . "/../libs/traits.php";
 					$result = call_user_func_array(array($fordpass, $Function), $Args);
 				}
 				
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('FordPass API returned "%s" for %s()', json_encode($result), $Function), 0);
+				$this->SendDebug( __FUNCTION__ , sprintf('FordPass API returned "%s" for %s()', json_encode($result), $Function), 0);
 				
 			} catch(Exception $e) {
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('ExecuteFordPassRequest() failed for function %s() in request id %s. The error was "%s:%d"', $Function, $RequestId, $e->getMessage(), $e->getCode()), 0);
+				$this->SendDebug( __FUNCTION__ , sprintf('ExecuteFordPassRequest() failed for function %s() in request id %s. The error was "%s:%d"', $Function, $RequestId, $e->getMessage(), $e->getCode()), 0);
 				$this->LogMessage(sprintf('ExecuteFordPassRequest() failed for function %s() in request id %s. The error was "%s"', $Function, $RequestId,$e->getMessage()), KL_ERROR);
 				
 				$return['Success'] = false;
@@ -193,13 +193,13 @@ include __DIR__ . "/../libs/traits.php";
 				$return['Result'] = $result;
 			}
 			
-			$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Sending the result back to the child with Id %s. Result sendt is "%s"', (string)$ChildId, json_encode($return)), 0);
+			$this->SendDebug( __FUNCTION__ , sprintf('Sending the result back to the child with Id %s. Result sendt is "%s"', (string)$ChildId, json_encode($return)), 0);
 			$this->SendDataToChildren(json_encode(["DataID" => "{677E0420-B69C-597E-C909-39877953E1DC}", "ChildId" => $ChildId, "Buffer" => $return]));
 		}
 	
 
 		private function InitFordPass() {
-			$this->SendDebug(IPS_GetName($this->InstanceID), 'Initializing the FordPass Class...', 0);
+			$this->SendDebug( __FUNCTION__ , 'Initializing the FordPass Class...', 0);
 	
 			$this->SetTimerInterval('FordPassRefreshToken' . (string)$this->InstanceID, 0); // Disable the timer
 	
@@ -208,8 +208,8 @@ include __DIR__ . "/../libs/traits.php";
 			$region = $this->ReadPropertyString('Region');
 	
 			if(strlen($username)==0) {
-				$this->LogMessage(sprintf('InitFordPass(): Missing property "Username" in module "%s"', IPS_GetName($this->InstanceID)), KL_ERROR);
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('InitFordPass(): Missing property "Username" in module "%s"', IPS_GetName($this->InstanceID)), 0);
+				$this->LogMessage(sprintf('InitFordPass(): Missing property "Username" in module "%s"',  __FUNCTION__ ), KL_ERROR);
+				$this->SendDebug( __FUNCTION__ , sprintf('InitFordPass(): Missing property "Username" in module "%s"', IPS_GetName($this->InstanceID)), 0);
 				
 				return null;
 			}
@@ -221,28 +221,28 @@ include __DIR__ . "/../libs/traits.php";
 			}
 			
 			try {
-				$this->SendDebug(IPS_GetName($this->InstanceID), 'Connecting to FordPass API...', 0);
+				$this->SendDebug( __FUNCTION__ , 'Connecting to FordPass API...', 0);
 				$fordpass->Connect();
 				$token = $fordpass->GetToken();
 				
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Saving Token for later use: %s', json_encode($token)), 0);
+				$this->SendDebug( __FUNCTION__ , sprintf('Saving Token for later use: %s', json_encode($token)), 0);
 				$this->AddTokenToBuffer($token);
 				
 				$expiresIn = ($token->ExpiresIn-5*60); // Set to 5 minutes before token timeout
 	
 				$this->SetTimerInterval('FordPassRefreshToken' . (string)$this->InstanceID, $expiresIn*1000); 
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Token Refresh Timer set to %s second(s)', (string)$expiresIn), 0);
+				$this->SendDebug( __FUNCTION__ , sprintf('Token Refresh Timer set to %s second(s)', (string)$expiresIn), 0);
 
 				return $fordpass;
 			} catch(Exception $e) {
 				$this->LogMessage(sprintf('Failed to connect to FordPass API. The error was "%s"',  $e->getMessage()), KL_ERROR);
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Failed to connec to FordPass API. The error was "%s"', $e->getMessage()), 0);
+				$this->SendDebug( __FUNCTION__ , sprintf('Failed to connec to FordPass API. The error was "%s"', $e->getMessage()), 0);
 				return null;
 			}
 		}
 
 		private function RefreshToken() {
-			$this->SendDebug(IPS_GetName($this->InstanceID), 'Refreshing the FordPass Class...', 0);
+			$this->SendDebug( __FUNCTION__ , 'Refreshing the FordPass Class...', 0);
 	
 			$this->SetTimerInterval('FordPassRefreshToken' . (string)$this->InstanceID, 0); // Disable the timer
 	
@@ -272,13 +272,13 @@ include __DIR__ . "/../libs/traits.php";
 	
 				$token = $fordpass->GetToken();
 	
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Saving refreshed Token for later use: %s', json_encode($token)), 0);
+				$this->SendDebug( __FUNCTION__ , sprintf('Saving refreshed Token for later use: %s', json_encode($token)), 0);
 				$this->AddTokenToBuffer($token);
 	
 				$expiresIn = ($token->ExpiresIn-5*60); // Set to 5 minutes before token timeout
 	
 				$this->SetTimerInterval('FordPassRefreshToken' . (string)$this->InstanceID, $expiresIn*1000); 
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Token Refresh Timer set to %s second(s)', (string)$expiresIn), 0);
+				$this->SendDebug( __FUNCTION__ , sprintf('Token Refresh Timer set to %s second(s)', (string)$expiresIn), 0);
 			} catch(Exception $e) {
 				$this->AddTokenToBuffer(null);	
 				throw new Exception(sprintf('RefreshToken() failed. The error was "%s"', $e->getMessage()));
@@ -290,12 +290,12 @@ include __DIR__ . "/../libs/traits.php";
 				$jsonToken = $this->GetBuffer('Token');
 				
 				if(strlen($jsonToken)==0) {
-					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Missing token in the buffer', $jsonToken), 0);
+					$this->SendDebug( __FUNCTION__ , sprintf('Missing token in the buffer', $jsonToken), 0);
 					$this->Unlock('Token');
 					return null;
 				}
 	
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Got token "%s" from the buffer', $jsonToken), 0);
+				$this->SendDebug( __FUNCTION__ , sprintf('Got token "%s" from the buffer', $jsonToken), 0);
 				$this->Unlock('Token');
 				
 				$token = json_decode($jsonToken);
@@ -315,7 +315,7 @@ include __DIR__ . "/../libs/traits.php";
 				else
 					$token = json_encode($Token);
 				$this->SetBuffer('Token', $token);
-				$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('Added token "%s" to the buffer', $token), 0);
+				$this->SendDebug( __FUNCTION__ , sprintf('Added token "%s" to the buffer', $token), 0);
 				$this->Unlock('Token');
 			}
 		}

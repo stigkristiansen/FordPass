@@ -468,7 +468,7 @@
 					}
 
 					$values[$Ident] = array('State' => $State, 'Timestamp' => microtime(true));
-					$newValues = json_encode($values)
+					$newValues = json_encode($values);
 					$this->SetBuffer('InProgress', $newValues);
 					$this->Unlock('InProgress');
 					$this->SendDebug(IPS_GetName($this->InstanceID), sprintf('InProgress buffer is updated to "%s"', $newValues), 0);

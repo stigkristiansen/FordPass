@@ -399,6 +399,8 @@
 									}
 								}
 								break;
+							case 'otainfo':
+								break;
 							default:
 								throw new Exception(sprintf('Unknown function "%s()" receeived in repsponse with request id %s from gateway', $function, $requestId));
 						}

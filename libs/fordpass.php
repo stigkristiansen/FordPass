@@ -15,6 +15,7 @@ class FordPass {
     const BASE_ENDPOINT = 'https://usapi.cv.ford.com/api';
     const GUARD_ENDPOINT = 'https://api.mps.ford.com/api';
     const SSO_ENDPOINT = 'https://sso.ci.ford.com/oidc/endpoint/default/token';
+    const OTA_ENDPOINT = 'https://www.digitalservices.ford.com/owner/api/v2/ota/status';
 
     const CLIENT_ID = '9fb503e0-715b-47e8-adfd-ad4b7770f73b';
 
@@ -27,6 +28,12 @@ class FordPass {
 
     const API_HEADERS = array(
                             "Content-Type:application/json"
+                        );
+
+    const OTA_HEADERS = array(
+                            'Consumer-Key:Z28tbmEtZm9yZA==', 
+                            'Referer:https://ford.com',
+                            'Origin:https://ford.com'
                         );
 
     const AUTH_HEADERS = array(
@@ -154,6 +161,22 @@ class FordPass {
             }
         } catch(Exception $e) {
             throw new Exception($e->getMessage());
+        }
+    }
+
+    public function OTAInfo(string $VIN) {
+        $this->Connect();
+
+        $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS, self::OTA_HEADERS);
+        $url = self::OTA_ENDPOINT . '?vin='$VIN;
+
+        try {
+            $result = $this->request('get', $url, $headers);
+            
+            return $result;
+
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
         }
     }
 

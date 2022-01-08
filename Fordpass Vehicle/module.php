@@ -424,6 +424,7 @@
 					$guid=self::GUID();
 					$request[] = ['Function'=>'Status','VIN'=>$VIN, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 					$request[] = ['Function'=>'GuardStatus','VIN'=>$VIN, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
+					$request[] = ['Function'=>'OTAInfo','VIN'=>$VIN, 'RequestId'=>$guid, 'ChildId'=>(string)$this->InstanceID];
 					
 					return $request;
 				}

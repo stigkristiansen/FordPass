@@ -110,6 +110,9 @@ include __DIR__ . "/../libs/traits.php";
 					case 'status':
 						$this->ExecuteFordPassRequest($childId, $requestId, 'Status', array($VIN));
 						break;
+					case 'otainfo':
+							$this->ExecuteFordPassRequest($childId, $requestId, 'OTAInfo', array($VIN));
+							break;
 					case 'guardstatus':
 						$this->ExecuteFordPassRequest($childId, $requestId, 'GuardStatus', array($VIN));
 						break;

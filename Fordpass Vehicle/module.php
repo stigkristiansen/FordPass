@@ -110,7 +110,7 @@
 				try {
 					$this->SendDebug( __FUNCTION__ , sprintf('ReqestAction called for Ident "%s" with Value %s', $Ident, (string)$Value), 0);
 		
-					$VIN = strtouppper($this->ReadPropertyString('VIN'));
+					$VIN = strtoupper($this->ReadPropertyString('VIN'));
 
 					if(strlen($VIN)==0) {
 						throw new Exception(sprintf('Property "VIN" is empty in module "%s"', IPS_GetName($this->InstanceID)));

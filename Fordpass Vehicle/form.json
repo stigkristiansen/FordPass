@@ -8,7 +8,7 @@
             "type" :  "Label" ,  "caption" :  "VEHICLE"
         },
         {
-            "type" :  "ValidationTextBox" ,  "name" :  "VIN" ,  "caption" :  "VIN"
+            "type" :  "ValidationTextBox" ,  "name" :  "VIN" ,  "caption" : "VIN", "validate" : "[A-Z0-9]{17}"
         },
         {
             "type": "NumberSpinner", "name": "UpdateInterval", "minimum":15, "caption": "Refresh Interval", "suffix": "seconds"

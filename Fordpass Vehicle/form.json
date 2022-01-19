@@ -20,7 +20,5 @@
             "type": "NumberSpinner", "name": "ForceIntervalDisconnected", "minimum":1, "caption": "Request Update Interval when NOT connected", "suffix": "minutes"
         }
 
-    ],
-    "actions": [],
-    "status": []
+    ]
 }

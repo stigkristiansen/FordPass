@@ -11,7 +11,7 @@
             "type" :  "ValidationTextBox" ,  "name" :  "VIN" ,  "caption" : "VIN", "validate" : "[A-Z0-9]{17}"
         },
         {
-            "type": "NumberSpinner", "name": "UpdateInterval", "minimum":15, "caption": "Refresh Interval", "suffix": "seconds"
+            "type": "NumberSpinner", "name": "UpdateInterval", "minimum":1, "caption": "Refresh Interval", "suffix": "minutes"
         },
         {
             "type": "NumberSpinner", "name": "ForceInterval", "minimum":0, "caption": "Request Update Interval (awakens the car)", "suffix": "hour(s)"

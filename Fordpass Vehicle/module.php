@@ -40,8 +40,8 @@
 					[false, 'Deactivated', '', -1]
 				]);
 
-				$this->RegisterPropertyInteger('UpdateInterval', 15);
-				$this->RegisterPropertyInteger('ForceInterval', 15);
+				$this->RegisterPropertyInteger('UpdateInterval', 1);
+				$this->RegisterPropertyInteger('ForceInterval', 6);
 				//$this->RegisterPropertyInteger('ForceIntervalDisconnected', 15);
 				$this->RegisterPropertyString('VIN', '');
 					
@@ -417,9 +417,9 @@
 			}
 	
 			private function InitTimers(){
-				$this->SetTimerInterval('FordPassRefresh' . (string)$this->InstanceID, $this->ReadPropertyInteger('UpdateInterval')*1000); 
+				$this->SetTimerInterval('FordPassRefresh' . (string)$this->InstanceID, $this->ReadPropertyInteger('UpdateInterval')*1000*60); 
 				
-				$forceInterval = $this->ReadPropertyInteger('ForceInterval')*1000*60;
+				$forceInterval = $this->ReadPropertyInteger('ForceInterval')*1000*60*60;
 				if($forceInterval>0) {
 					$this->SetTimerInterval('FordPassForce' . (string)$this->InstanceID, $forceInterval); 
 				} else {

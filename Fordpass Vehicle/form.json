@@ -14,11 +14,7 @@
             "type": "NumberSpinner", "name": "UpdateInterval", "minimum":15, "caption": "Refresh Interval", "suffix": "seconds"
         },
         {
-            "type": "NumberSpinner", "name": "ForceInterval", "minimum":15, "caption": "Request Update Interval when connected to charger", "suffix": "seconds"
-        },
-        {
-            "type": "NumberSpinner", "name": "ForceIntervalDisconnected", "minimum":1, "caption": "Request Update Interval when NOT connected", "suffix": "minutes"
+            "type": "NumberSpinner", "name": "ForceInterval", "minimum":0, "caption": "Request Update Interval (awakens the car)", "suffix": "hour(s)"
         }
-
     ]
 }

@@ -18,11 +18,11 @@ class FordPass {
     const OTA_ENDPOINT = 'https://www.digitalservices.ford.com/owner/api/v2/ota/status';
 
     const CLIENT_ID = '9fb503e0-715b-47e8-adfd-ad4b7770f73b';
-
+                       
     const DEFAULT_HEADERS = array(
                                 "Accept:*/*",
                                 "Accept-Language:en-us",
-                                "User-Agent:fordpass-ap/93 CFNetwork/1197 Darwin/20.0.0",
+                                "User-Agent:FordPass/5 CFNetwork/1327.0.4 Darwin/21.2.0",
                                 "Accept-Encoding:gzip,deflate,br"
                             );
 

@@ -21,8 +21,8 @@ class FordPass {
                        
     const DEFAULT_HEADERS = array(
                                 "Accept:*/*",
-                                "Accept-Language:en-us",
-                                "User-Agent:FordPass/5 CFNetwork/1327.0.4 Darwin/21.2.0",
+                                "Accept-Language:en-US,en;q=0.9",
+                                "User-Agent:FordPass/8 CFNetwork/1333.0.4 Darwin/21.5.0",
                                 "Accept-Encoding:gzip,deflate,br"
                             );
 
@@ -33,7 +33,8 @@ class FordPass {
     const OTA_HEADERS = array(
                             'Consumer-Key:Z28tbmEtZm9yZA==', 
                             'Referer:https://ford.com',
-                            'Origin:https://ford.com'
+                            'Origin:https://ford.com',
+                            'Application-Id:71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592'
                         );
 
     const AUTH_HEADERS = array(

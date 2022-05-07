@@ -370,9 +370,11 @@ class FordPass {
             $Headers[] = 'Content-Length:0';
         }
 
-        if(array_search('Application-Id:71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592', $Headers)===false) {
-            $Headers[] = 'Application-Id:'. $this->Region;
-        }
+        //if(array_search('Application-Id:71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592', $Headers)===false) {
+            //$Headers[] = 'Application-Id:'. $this->Region;
+        //}
+
+        $Headers[] = 'Application-Id:71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592';
 
         if(strlen($this->accessToken)>0 && $this->expires > new DateTime('now')) {
             $Headers[] = 'auth-token:'. $this->accessToken;

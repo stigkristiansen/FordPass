@@ -370,7 +370,7 @@ class FordPass {
             $Headers[] = 'Content-Length:0';
         }
 
-        if(array_search('Application-Id:71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592', $headers)===false) {
+        if(array_search('Application-Id:71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592', $Headers)===false) {
             $Headers[] = 'Application-Id:'. $this->Region;
         }
 

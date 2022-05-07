@@ -169,7 +169,7 @@ class FordPass {
         $this->Connect();
 
         $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS, self::OTA_HEADERS);
-        $url = self::OTA_ENDPOINT . '?vin='. $VIN;
+        $url = self::OTA_ENDPOINT . '?country=USA&vin='. $VIN;
 
         try {
             $result = $this->request('get', $url, $headers);

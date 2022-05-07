@@ -31,10 +31,10 @@ class FordPass {
                         );
 
     const OTA_HEADERS = array(
+                            'Application-Id:71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592',
                             'Consumer-Key:Z28tbmEtZm9yZA==', 
                             'Referer:https://ford.com',
-                            'Origin:https://ford.com',
-                            'Application-Id:71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592'
+                            'Origin:https://ford.com'
                         );
 
     const AUTH_HEADERS = array(
@@ -370,7 +370,9 @@ class FordPass {
             $Headers[] = 'Content-Length:0';
         }
 
-         $Headers[] = 'Application-Id:'. $this->Region;
+        if(array_search('Application-Id:71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592', $headers)===false) {
+            $Headers[] = 'Application-Id:'. $this->Region;
+        }
 
         if(strlen($this->accessToken)>0 && $this->expires > new DateTime('now')) {
             $Headers[] = 'auth-token:'. $this->accessToken;

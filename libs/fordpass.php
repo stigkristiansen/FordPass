@@ -31,7 +31,6 @@ class FordPass {
                         );
 
     const OTA_HEADERS = array(
-                            'Application-Id:71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592',
                             'Consumer-Key:Z28tbmEtZm9yZA==', 
                             'Referer:https://ford.com',
                             'Origin:https://ford.com'

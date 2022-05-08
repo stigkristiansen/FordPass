@@ -18,6 +18,7 @@ class FordPass {
     const OTA_ENDPOINT = 'https://www.digitalservices.ford.com/owner/api/v2/ota/status';
 
     const CLIENT_ID = '9fb503e0-715b-47e8-adfd-ad4b7770f73b';
+    const REGION_ID-NA = 
                        
     const DEFAULT_HEADERS = array(
                                 "Accept:*/*",
@@ -93,14 +94,14 @@ class FordPass {
             $now = new DateTime('now');
             
             $headers = array_merge(self::DEFAULT_HEADERS, self::AUTH_HEADERS);
-            $result = $this->request('post', $url, $headers, http_build_query($body));
+            $result = $this->Request('post', $url, $headers, http_build_query($body));
                         
             if($result->httpcode==200) {
                 $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);
                 $body = array("code" => $result->result->access_token);
                 $url = self::GUARD_ENDPOINT . '/oauth2/v1/token';
                 
-                $result = $this->request('put', $url, $headers, json_encode($body));
+                $result = $this->Request('put', $url, $headers, json_encode($body));
                 
                 if($result->httpcode==200) {
                     $this->accessToken = $result->result->access_token;
@@ -141,7 +142,7 @@ class FordPass {
         try {
             $now = new DateTime('now');
 
-            $result = $this->request('put', $url, $headers, json_encode($body));
+            $result = $this->Request('put', $url, $headers, json_encode($body));
 
             if($result->httpcode==200) {
                 $this->accessToken = $result->result->access_token;
@@ -171,7 +172,7 @@ class FordPass {
         $url = self::OTA_ENDPOINT . '?country=USA&vin='. $VIN;
 
         try {
-            $result = $this->request('get', $url, $headers);
+            $result = $this->Request('get', $url, $headers);
             
             return $result;
 
@@ -189,7 +190,7 @@ class FordPass {
         $url = self::BASE_ENDPOINT . '/vehicles/v4/' . $VIN . '/status?' . http_build_query($params);
         
         try {
-            $result = $this->request('get', $url, $headers);
+            $result = $this->Request('get', $url, $headers);
             
             return $result;
 
@@ -206,7 +207,7 @@ class FordPass {
         $url = self::BASE_ENDPOINT . '/vehicles/v2/' . $VIN . '/doors/lock';
         
         try {
-            $result = $this->request($State?'put':'delete', $url, $headers);
+            $result = $this->Request($State?'put':'delete', $url, $headers);
 
            return $this->PollAndWaitForStatus($url, $headers, $result);
 
@@ -223,7 +224,7 @@ class FordPass {
         $url = self::BASE_ENDPOINT . '/vehicles/v2/' . $VIN . '/engine/start';
         
         try {
-            $result = $this->request($State?'put':'delete', $url, $headers);
+            $result = $this->Request($State?'put':'delete', $url, $headers);
 
            return $this->PollAndWaitForStatus($url, $headers, $result);
 
@@ -240,7 +241,7 @@ class FordPass {
         $url = self::GUARD_ENDPOINT . '/guardmode/v1/' . $VIN . '/session';
         
         try {
-            $result = $this->request($State?'put':'delete', $url, $headers);
+            $result = $this->Request($State?'put':'delete', $url, $headers);
 
            //return $result;
 
@@ -281,7 +282,7 @@ class FordPass {
         $url = self::GUARD_ENDPOINT . '/guardmode/v1/' . $VIN . '/session?' . http_build_query($params);
         
         try {
-            $result = $this->request('get', $url, $headers);
+            $result = $this->Request('get', $url, $headers);
             
             return $result;
 
@@ -298,7 +299,7 @@ class FordPass {
         $url = self::BASE_ENDPOINT . '/vehicles/v2/' . $VIN . '/status';
         
         try {
-            $result = $this->request('put', $url, $headers);
+            $result = $this->Request('put', $url, $headers);
             
             if(isset($result->result->status)) {
                 return $result->result->status==200;
@@ -325,7 +326,7 @@ class FordPass {
             $Url .= '/'. $Result->result->commandId;                    
             
             for($count=1;$count<50;$count++) {
-                $result = $this->request('get', $Url, $Headers);
+                $result = $this->Request('get', $Url, $Headers);
                 
                 if(!isset($result->result->status)) {
                     throw new Exception(sprintf('%s failed. Invalid response. Missing value "status"', $Url));
@@ -344,7 +345,7 @@ class FordPass {
 
     }
        
-    private function request($Type, $Url, $Headers, $Data=null) {
+    private function Request($Type, $Url, $Headers, $Data=null) {
 		$ch = curl_init();
 		
 		switch(strtolower($Type)) {
@@ -364,7 +365,7 @@ class FordPass {
 
         if($Data!=null) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, $Data);
-            $Headers[] = 'Content-Length:'. (string)strlen($Data);
+            $Headers[] = 'Content-Length:' . (string)strlen($Data);
         } else {
             $Headers[] = 'Content-Length:0';
         }
@@ -373,10 +374,10 @@ class FordPass {
             //$Headers[] = 'Application-Id:'. $this->Region;
         //}
 
-        $Headers[] = 'Application-Id:71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592';
+        $Headers[] = 'Application-Id:' . self::REGION_ID_NA;
 
         if(strlen($this->accessToken)>0 && $this->expires > new DateTime('now')) {
-            $Headers[] = 'auth-token:'. $this->accessToken;
+            $Headers[] = 'auth-token:' . $this->accessToken;
         }
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, $Headers);
@@ -404,12 +405,12 @@ class FordPass {
         $response['result'] = (object) null ;
         
         $return = (object) $response;
-        $return->result = $this->isJson($result)?json_decode($result):$result; 
+        $return->result = $this->IsJson($result)?json_decode($result):$result; 
 
         return  $return;
 	}
 
-    private function isJson(string $Data) {
+    private function IsJson(string $Data) {
         json_decode($Data);
         return (json_last_error() == JSON_ERROR_NONE);
     }

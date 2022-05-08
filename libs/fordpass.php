@@ -18,7 +18,7 @@ class FordPass {
     const OTA_ENDPOINT = 'https://www.digitalservices.ford.com/owner/api/v2/ota/status';
 
     const CLIENT_ID = '9fb503e0-715b-47e8-adfd-ad4b7770f73b';
-    const REGION_ID-NA = 
+    const REGION_ID-NA = '71A3AD0A-CF46-4CCF-B473-FC7FE5BC4592';
                        
     const DEFAULT_HEADERS = array(
                                 "Accept:*/*",

@@ -404,14 +404,14 @@
 								//$fuseResponseList = $result->result->fuseResponse->fuseResponseList;
 								//$tappsResponse = $result->result->tappsResponse;
 			
-								$html = '';
+								//$html = '';
 								//foreach($fuseResponseList as $list) {
 								//	$html .= $this->CreateHTMLList($list, 0, 'FuseResponse');
 								//}
 			
 								//$html .= $this->CreateHTMLList($tappsResponse, 0, 'TappsResponse');
 
-								$html .= $this->CreateHTMLList($result->result);
+								$html = $this->CreateHTMLList($result->result);
 								
 								$this->SendDebug( __FUNCTION__ , sprintf('OTA info in html: %s', $html), 0);
 
@@ -457,7 +457,7 @@
 				return $html;
 			}
 */
-			function CreateHTMLList($List, int $Indent = 0) : string {
+			private function CreateHTMLList($List, int $Indent = 0) : string {
 				$html='';
 				
 				$line = $Indent>0?'<p style="text-indent:'.(string)$Indent.'px">%s</p>':'<p>%s</p>';
@@ -467,9 +467,9 @@
 					if(is_object($value)||is_array($value)) {
 						$html.=sprintf($line, $key.':');
 						if(is_object($value)) {
-							$html.=CreateHTMLList($value, $Indent+20);
+							$html.=$this->CreateHTMLList($value, $Indent+20);
 						} elseif(sizeof($value)>0) {
-							$html.=CreateHTMLList($value, $Indent+20);
+							$html.=$this->CreateHTMLList($value, $Indent+20);
 						}
 					} else {
 						$html.=sprintf($line,$key.': '.$value);

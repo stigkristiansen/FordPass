@@ -405,10 +405,10 @@
 			
 								$html = '';
 								foreach($fuseResponseList as $list) {
-									$html .= CreateHTMLList($list, 0, 'FuseResponse');
+									$html .= $this->CreateHTMLList($list, 0, 'FuseResponse');
 								}
 			
-								$html .= CreateHTMLList($tappsResponse, 0, 'TappsResponse');
+								$html .= $this->CreateHTMLList($tappsResponse, 0, 'TappsResponse');
 								
 								$this->SendDebug( __FUNCTION__ , 'OTA info in html: '.$html, 0);
 								break;
@@ -440,9 +440,9 @@
 					if(is_object($value)||is_array($value)) {
 						$html.=sprintf($line, $key.':');
 						if(is_object($value)) {
-							$html.=CreateHTMLList($value, 20);
+							$html.=$this->CreateHTMLList($value, 20);
 						} elseif(sizeof($value)>0) {
-							$html.=CreateHTMLList($value, 20);
+							$html.=$this->CreateHTMLList($value, 20);
 						}
 					} else {
 						$html.=sprintf($line,$key.': '.$value);

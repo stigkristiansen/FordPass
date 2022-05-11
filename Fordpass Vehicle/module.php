@@ -400,6 +400,17 @@
 								}
 								break;
 							case 'otainfo':
+								$fuseResponseList = $result->result->fuseResponse->fuseResponseList;
+								$tappsResponse = $result->result->tappsResponse;
+			
+								$html = '';
+								foreach($fuseResponseList as $list) {
+									$html .= CreateHTMLList($list, 0, 'FuseResponse');
+								}
+			
+								$html .= CreateHTMLList($tappsResponse, 0, 'TappsResponse');
+								
+								$this->SendDebug( __FUNCTION__ , 'OTA info in html: '.$html, 0);
 								break;
 							default:
 								throw new Exception(sprintf('Unknown function "%s()" receeived in repsponse with request id %s from gateway', $function, $requestId));
@@ -414,6 +425,31 @@
 					$this->LogMessage(sprintf('ReceiveData() failed. The error was "%s"',  $e->getMessage()), KL_ERROR);
 					$this->SendDebug( __FUNCTION__ , sprintf('ReceiveData() failed. The error was "%s"',  $e->getMessage()), 0);
 				}
+			}
+
+			private function CreateHTMLList(object $List, int $Indent, string $Title = '') {
+				$html='';
+				if(strlen($Title)>0) {
+					$html='<h1>'.$Title.'</h1>'.PHP_EOL;
+				}
+			
+				$line = $Indent>0?'<p style="text-indent:'.(string)$Indent.'px">%s</p>':'<p>%s</p>';
+				$line .= PHP_EOL;
+			
+				foreach($List as $key => $value) {
+					if(is_object($value)||is_array($value)) {
+						$html.=sprintf($line, $key.':');
+						if(is_object($value)) {
+							$html.=CreateHTMLList($value, 20);
+						} elseif(sizeof($value)>0) {
+							$html.=CreateHTMLList($value, 20);
+						}
+					} else {
+						$html.=sprintf($line,$key.': '.$value);
+					}
+				}
+			
+				return $html;
 			}
 	
 			private function InitTimers(){

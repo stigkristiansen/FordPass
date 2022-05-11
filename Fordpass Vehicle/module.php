@@ -62,7 +62,8 @@
 				$this->RegisterVariableBoolean('IgnitionStatus', 'Ignition', 'FPV.IgnitionStatus', 9);
 				$this->RegisterVariableBoolean('DoorStatus', 'Doors Status', 'FPV.DoorStatus', 10);
 				$this->RegisterVariableBoolean('WindowStatus', 'Windows Status', 'FPV.WindowStatus', 11);
-				$this->RegisterVariableString('OTAInformation', 'OTA Information', '~HTMLBox', 12);
+				$id = $this->RegisterVariableString('OTAInformation', 'OTA Information', '~HTMLBox', 12);
+				IPS_SetIcon($id, 'Information');
 									
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
 				$this->RegisterTimer('FordPassForce' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Force", 0);'); 
@@ -401,16 +402,6 @@
 								}
 								break;
 							case 'otainfo':
-								//$fuseResponseList = $result->result->fuseResponse->fuseResponseList;
-								//$tappsResponse = $result->result->tappsResponse;
-			
-								//$html = '';
-								//foreach($fuseResponseList as $list) {
-								//	$html .= $this->CreateHTMLList($list, 0, 'FuseResponse');
-								//}
-			
-								//$html .= $this->CreateHTMLList($tappsResponse, 0, 'TappsResponse');
-
 								$html = $this->CreateHTMLList($result->result);
 								
 								$this->SendDebug( __FUNCTION__ , sprintf('OTA info in html: %s', $html), 0);
@@ -432,31 +423,6 @@
 				}
 			}
 
-			/*private function CreateHTMLList(object $List, int $Indent, string $Title = '') {
-				$html='';
-				if(strlen($Title)>0) {
-					$html='<h1>'.$Title.'</h1>'.PHP_EOL;
-				}
-			
-				$line = $Indent>0?'<p style="text-indent:'.(string)$Indent.'px">%s</p>':'<p>%s</p>';
-				$line .= PHP_EOL;
-			
-				foreach($List as $key => $value) {
-					if(is_object($value)||is_array($value)) {
-						$html.=sprintf($line, $key.':');
-						if(is_object($value)) {
-							$html.=$this->CreateHTMLList($value, 20);
-						} elseif(sizeof($value)>0) {
-							$html.=$this->CreateHTMLList($value, 20);
-						}
-					} else {
-						$html.=sprintf($line,$key.': '.$value);
-					}
-				}
-			
-				return $html;
-			}
-*/
 			private function CreateHTMLList($List, int $Indent = 0) : string {
 				$html='';
 				

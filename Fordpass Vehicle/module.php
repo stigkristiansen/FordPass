@@ -472,7 +472,14 @@
 							$html.=$this->CreateHTMLList($value, $Indent+20);
 						}
 					} else {
-						$html.=sprintf($line,$key.': '.$value);
+						if(is_bool($value)) {
+							$formatedValue = $value?'true':'false';
+						} elseif (is_null($value)) {
+							$formatedValue = 'null';
+						} else {
+							$formatedValue = (string) $value;
+						}
+						$html.=sprintf($line,$key.': '.$formatedValue);
 					}
 				}
 			

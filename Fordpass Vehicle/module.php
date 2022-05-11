@@ -62,6 +62,7 @@
 				$this->RegisterVariableBoolean('IgnitionStatus', 'Ignition', 'FPV.IgnitionStatus', 9);
 				$this->RegisterVariableBoolean('DoorStatus', 'Doors Status', 'FPV.DoorStatus', 10);
 				$this->RegisterVariableBoolean('WindowStatus', 'Windows Status', 'FPV.WindowStatus', 11);
+				
 				$id = $this->RegisterVariableString('OTAInformation', 'OTA Information', '~HTMLBox', 12);
 				IPS_SetIcon($id, 'Information');
 									

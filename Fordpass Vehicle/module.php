@@ -401,15 +401,17 @@
 								}
 								break;
 							case 'otainfo':
-								$fuseResponseList = $result->result->fuseResponse->fuseResponseList;
-								$tappsResponse = $result->result->tappsResponse;
+								//$fuseResponseList = $result->result->fuseResponse->fuseResponseList;
+								//$tappsResponse = $result->result->tappsResponse;
 			
 								$html = '';
-								foreach($fuseResponseList as $list) {
-									$html .= $this->CreateHTMLList($list, 0, 'FuseResponse');
-								}
+								//foreach($fuseResponseList as $list) {
+								//	$html .= $this->CreateHTMLList($list, 0, 'FuseResponse');
+								//}
 			
-								$html .= $this->CreateHTMLList($tappsResponse, 0, 'TappsResponse');
+								//$html .= $this->CreateHTMLList($tappsResponse, 0, 'TappsResponse');
+
+								$html .= $this->CreateHTMLList($result->result);
 								
 								$this->SendDebug( __FUNCTION__ , sprintf('OTA info in html: %s', $html), 0);
 
@@ -430,7 +432,7 @@
 				}
 			}
 
-			private function CreateHTMLList(object $List, int $Indent, string $Title = '') {
+			/*private function CreateHTMLList(object $List, int $Indent, string $Title = '') {
 				$html='';
 				if(strlen($Title)>0) {
 					$html='<h1>'.$Title.'</h1>'.PHP_EOL;
@@ -446,6 +448,28 @@
 							$html.=$this->CreateHTMLList($value, 20);
 						} elseif(sizeof($value)>0) {
 							$html.=$this->CreateHTMLList($value, 20);
+						}
+					} else {
+						$html.=sprintf($line,$key.': '.$value);
+					}
+				}
+			
+				return $html;
+			}
+*/
+			function CreateHTMLList($List, int $Indent = 0) : string {
+				$html='';
+				
+				$line = $Indent>0?'<p style="text-indent:'.(string)$Indent.'px">%s</p>':'<p>%s</p>';
+				$line .= PHP_EOL;
+			
+				foreach($List as $key => $value) {
+					if(is_object($value)||is_array($value)) {
+						$html.=sprintf($line, $key.':');
+						if(is_object($value)) {
+							$html.=CreateHTMLList($value, $Indent+20);
+						} elseif(sizeof($value)>0) {
+							$html.=CreateHTMLList($value, $Indent+20);
 						}
 					} else {
 						$html.=sprintf($line,$key.': '.$value);

@@ -62,6 +62,7 @@
 				$this->RegisterVariableBoolean('IgnitionStatus', 'Ignition', 'FPV.IgnitionStatus', 9);
 				$this->RegisterVariableBoolean('DoorStatus', 'Doors Status', 'FPV.DoorStatus', 10);
 				$this->RegisterVariableBoolean('WindowStatus', 'Windows Status', 'FPV.WindowStatus', 11);
+				$this->RegisterVariableString('OTAInformation', 'OTAInformation', '~HTMLBox', 12);
 									
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
 				$this->RegisterTimer('FordPassForce' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Force", 0);'); 
@@ -410,7 +411,9 @@
 			
 								$html .= $this->CreateHTMLList($tappsResponse, 0, 'TappsResponse');
 								
-								$this->SendDebug( __FUNCTION__ , 'OTA info in html: '.$html, 0);
+								$this->SendDebug( __FUNCTION__ , sprintf('OTA info in html: %s', $html), 0);
+
+								$this->SetValueEx('OTAInformation', $html);
 								break;
 							default:
 								throw new Exception(sprintf('Unknown function "%s()" receeived in repsponse with request id %s from gateway', $function, $requestId));

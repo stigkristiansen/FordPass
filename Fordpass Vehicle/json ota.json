@@ -1,0 +1,88 @@
+{
+    "Function": "OTAInfo",
+    "Parameters": [
+        "WF0TK3SU4MMA15169"
+    ],
+    "RequestId": "{F9AC7A19-FE81-44F5-9419-F0EC76F04BD5}",
+    "Success": true,
+    "Result": {
+        "error": false,
+        "httpcode": 200,
+        "result": {
+            "displayOTAStatusReport": "UserAllowed",
+            "ccsStatus": {
+                "ccsConnectivity": "On",
+                "ccsVehicleData": "On"
+            },
+            "error": null,
+            "fuseResponse": {
+                "fuseResponseList": [
+                    {
+                        "vin": "WF0TK3SU4MMA15169",
+                        "oemCorrelationId": "FIRE-PRD-SOFTWARE-FNV2-576564-600171-9953",
+                        "deploymentId": "3a7a6b7b-7db2-46f0-b5e0-9d6fd3cc579b",
+                        "deploymentCreationDate": "2022-05-09T15:59:28.541+0000",
+                        "deploymentExpirationTime": "2022-05-16T15:59:28.541+0000",
+                        "otaTriggerExpirationTime": "2022-05-23T15:56:59.875+0000",
+                        "communicationPriority": "low",
+                        "type": "NEW_FEATURE",
+                        "triggerType": "SOFTWARE",
+                        "inhibitRequired": false,
+                        "additionalConsentLevel": 1,
+                        "tmcEnvironment": "PRD",
+                        "latestStatus": {
+                            "aggregateStatus": "artifact_retrieval_in_progress",
+                            "detailedStatus": "OTAM_S1023",
+                            "dateTimestamp": "2022-05-10T19:35:53.739+0000"
+                        },
+                        "packageUpdateDetails": {
+                            "releaseNotesUrl": "https:\/\/mmota.autonomic.ai\/1\/bytestream\/custom-release-note-1636993244098-0a23e5f0-9d7c-434d-a1c5-99013a06944f",
+                            "updateDisplayTime": 15,
+                            "wifiRequired": false,
+                            "packagePriority": 1,
+                            "failedOnResponse": "none",
+                            "cdnreleaseNotesUrl": "http:\/\/vehicleupdates.files.ford.com\/release-notes\/custom-release-note-1636993244098-0a23e5f0-9d7c-434d-a1c5-99013a06944f"
+                        },
+                        "deploymentFinalConsumerAction": "Not Set"
+                    }
+                ],
+                "languageText": {
+                    "Language": "English (US\/NA)",
+                    "LanguageCode": "ENU",
+                    "LanguageCodeMobileApp": "en-US",
+                    "Text": "FordPower-Up 1.7.1  \n\nNotes, Remote Vehicle Setup added; feature enhancements\n\nWe\u2019ve been busy.\n\nNotes lets you draw or take notes on your vehicle touchscreen. Your writings and artistic masterpieces can be saved. Notes includes a handy calculator and a tic-tac-toe board to kill time while waiting for that curbside takeout. \n\nOur new Remote Vehicle Setup lets you use FordPass\u2122 or the owner\u2019s site to set up profile preferences, including all your radio presets. It\u2019s all stored in the cloud and sent to your Mustang Mach-E through the SYNC\u00ae 4A system.\n\nNavigation automatically makes helpful destination suggestions (but you can turn that off if you like), plus new cloud connectivity combines conversational voice command recognition with internet-based search, so you get the latest info with almost every request.\n\nApple CarPlay\u00ae compatibility displays on-screen turn-by-turn navigation in your instrument cluster.\n\nFinally, the user-profile icons on your SiriusXM\u00ae with 360L radio will be a bit bigger, and there were a couple of bug fixes.\n\nWhew.\n\nOngoing updates like these help ensure that you\u2019re always driving the best possible version of your Mustang Mach-E. Keep in mind that update availability varies by model."
+                }
+            },
+            "tappsResponse": {
+                "vin": "WF0TK3SU4MMA15169",
+                "status": 200,
+                "vehicleInhibitStatus": null,
+                "lifeCycleModeStatus": {
+                    "lifeCycleMode": "NORMAL",
+                    "oemCorrelationId": "",
+                    "vehicleDateTime": "2022-02-02T06:48:11.000Z",
+                    "tappsDateTime": "2022-02-02T05:59:58.356619Z"
+                },
+                "asuActivationSchedule": {
+                    "scheduleType": "",
+                    "dayOfWeekAndTime": null,
+                    "activationScheduleDaysOfWeek": [],
+                    "activationScheduleTimeOfDay": null,
+                    "oemCorrelationId": "",
+                    "vehicleDateTime": "",
+                    "tappsDateTime": ""
+                },
+                "asuSettingsStatus": {
+                    "asuSettingsState": "ON",
+                    "notificationSettingsState": "ON",
+                    "oemCorrelationId": "2935",
+                    "vehicleDateTime": "2022-05-09T15:20:39.000Z",
+                    "tappsDateTime": "2022-05-09T13:20:42.638855Z"
+                },
+                "version": "2.0.0"
+            },
+            "updatePendingState": null,
+            "otaAlertStatus": "YOU ARE ALL SET"
+        }
+    }
+}

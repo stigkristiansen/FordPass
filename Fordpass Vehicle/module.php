@@ -65,6 +65,8 @@
 				
 				$id = $this->RegisterVariableString('OTAInformation', 'OTA Information', '~HTMLBox', 12);
 				IPS_SetIcon($id, 'Information');
+				$id = $this->RegisterVariableString('OTAAlertStatus', 'OTA Alert Status', '', 13);
+				IPS_SetIcon($id, 'Information');
 									
 				$this->RegisterTimer('FordPassRefresh' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Refresh", 0);'); 
 				$this->RegisterTimer('FordPassForce' . (string)$this->InstanceID, 0, 'IPS_RequestAction(' . (string)$this->InstanceID . ', "Force", 0);'); 
@@ -408,6 +410,8 @@
 								$this->SendDebug( __FUNCTION__ , sprintf('OTA info in html: %s', $html), 0);
 
 								$this->SetValueEx('OTAInformation', $html);
+								$this->SetValueEx('OTAAlertStatus', $result->result->otaAlertStatus);
+
 								break;
 							default:
 								throw new Exception(sprintf('Unknown function "%s()" receeived in repsponse with request id %s from gateway', $function, $requestId));

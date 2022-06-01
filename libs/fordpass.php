@@ -209,7 +209,24 @@ class FordPass {
         try {
             $result = $this->Request($State?'put':'delete', $url, $headers);
 
-           return $this->PollAndWaitForStatus($url, $headers, $result);
+            return $this->PollAndWaitForStatus($url, $headers, $result);
+
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
+    }
+
+    // Enable/disable Trailer Light Check
+    public function TrailerLightCheck(string $VIN, bool $State) : bool {
+        $this->Connect();
+
+        $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);
+        $url = self::BASE_ENDPOINT . '/vehicles//' . $VIN . '/trailerlightcheckactivation';
+        
+        try {
+            $result = $this->Request($State?'put':'delete', $url, $headers);
+
+            return $this->PollAndWaitForStatus($url, $headers, $result);
 
         } catch(Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode());
@@ -226,7 +243,7 @@ class FordPass {
         try {
             $result = $this->Request($State?'put':'delete', $url, $headers);
 
-           return $this->PollAndWaitForStatus($url, $headers, $result);
+            return $this->PollAndWaitForStatus($url, $headers, $result);
 
         } catch(Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode());

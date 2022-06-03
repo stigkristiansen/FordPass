@@ -410,7 +410,9 @@
 								$this->SendDebug( __FUNCTION__ , sprintf('OTA info in html: %s', $html), 0);
 
 								$this->SetValueEx('OTAInformation', $html);
-								$this->SetValueEx('OTAAlertStatus', $result->result->otaAlertStatus);
+								if(isset($result->result->otaAlertStatus)) {
+									$this->SetValueEx('OTAAlertStatus', $result->result->otaAlertStatus);
+								}
 
 								break;
 							default:

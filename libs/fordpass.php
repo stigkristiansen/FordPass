@@ -233,6 +233,24 @@ class FordPass {
         }
     }
 
+    // Trigger PANIC alarm
+    public function HornAndLights(string $VIN) : bool {
+        $this->Connect();
+
+        $headers = array_merge(self::DEFAULT_HEADERS, self::API_HEADERS);
+        $url = self::BASE_ENDPOINT . '/vehicles/v5/' . $VIN . '/panic/5';
+        
+        try {
+            $result = $this->Request('put', $url, $headers);
+
+            return $this->PollAndWaitForStatus($url, $headers, $result);
+
+        } catch(Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
+    }
+
+
     //  Start/stop the vehicle
     public function Start(string $VIN, bool $State) : bool {
         $this->Connect();
